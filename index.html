@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#141414">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Flam Flicks</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,7 +55,8 @@
 
   <script>
     // Replace this one value after deploying Code.gs as a Google Apps Script web app.
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpzLQRooa2-ZyBkURExKIfzJ1bQYz2rug6nwkpN-s42I2_hKOeHTW8dR-pHog6dIuwUg/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTG1L_cRyKBf37Hb9dZun7ZQR-R6frfgODsSbaoLCHnkC59ctHNLZWv2JANdBxkcT1kA/exec';
+    const APP_INSTANCE = 'flam-flicks-v1'; // Unique namespace; never shared with older Flam libraries.
 
     const state = { items: [], category: 'All', query: '' };
     const grid = document.getElementById('grid');
@@ -125,12 +129,13 @@
     function loadData() {
       if (!/^https:\/\/script\.google\.com\//.test(APPS_SCRIPT_URL)) { showError('Add your deployed Apps Script web app URL to the APPS_SCRIPT_URL constant in index.html.'); return; }
       grid.innerHTML = '<div class="state"><span class="spinner" aria-hidden="true"></span><p>Loading flicks…</p></div>';
-      const callback = `flamFlicks_${Date.now()}`; const script = document.createElement('script');
+      const requestId = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const callback = `flamFlicksV1_${requestId.replace(/\W/g, '')}`; const script = document.createElement('script');
       const timer = setTimeout(() => finish(new Error('The data request timed out. Check the deployment URL and web app access setting.')), 15000);
       function finish(error, payload) { clearTimeout(timer); delete window[callback]; script.remove(); if (error) return showError(error.message); if (!payload?.ok) return showError(payload?.error || 'The sheet returned an error.'); state.items = Array.isArray(payload.items) ? payload.items.filter(x => x.campaignName && safeUrl(x.link)) : []; state.category = 'All'; renderFilters(); renderCards(); }
       window[callback] = payload => finish(null, payload);
       script.onerror = () => finish(new Error('The endpoint could not be reached. Confirm that it is deployed for Anyone access.'));
-      script.src = `${APPS_SCRIPT_URL}${APPS_SCRIPT_URL.includes('?') ? '&' : '?'}callback=${encodeURIComponent(callback)}&v=${Date.now()}`;
+      script.src = `${APPS_SCRIPT_URL}${APPS_SCRIPT_URL.includes('?') ? '&' : '?'}callback=${encodeURIComponent(callback)}&app=${encodeURIComponent(APP_INSTANCE)}&cacheBust=${encodeURIComponent(requestId)}`;
       document.head.append(script);
     }
     search.addEventListener('input', event => { state.query = event.target.value; renderCards(); });
