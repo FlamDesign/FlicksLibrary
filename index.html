@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#141414">
+  <title>Flam Flicks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Roboto+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box}*{margin:0}html{background:#141414;color:#e8e6e3}body{min-height:100vh;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;background:#141414}button,input{font:inherit}
+    :root{--ink:#e8e6e3;--muted:#a8a49f;--quiet:#6b6760;--paper:#141414;--surface:#1f1f1f;--wash:#2a2a2a;--rule:#2e2e2e;--rule-dark:#3a3a3a;--flame:#e84b1a;--flame-wash:rgba(232,75,26,.15);--green:#2ecc71;--green-wash:rgba(46,204,113,.12);--display:"Roboto Condensed",sans-serif}
+    .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:22px;height:64px;padding:0 30px;border-bottom:1px solid var(--rule);background:linear-gradient(180deg,rgba(20,20,20,.98),rgba(20,20,20,.85));backdrop-filter:blur(16px)}
+    .brand{display:flex;align-items:center;gap:10px;flex:none}.brand-mark{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--flame)}.brand-mark svg{width:10px;fill:#fff}.brand-name{font-family:var(--display);font-size:20px;letter-spacing:-.3px}
+    .search{position:relative;width:min(430px,100%);margin-left:auto}.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--quiet);pointer-events:none}.search input{width:100%;height:38px;padding:0 14px 0 38px;border:1px solid var(--rule-dark);border-radius:10px;outline:none;background:var(--surface);color:var(--ink);font-size:13.5px;transition:.16s}.search input::placeholder{color:var(--quiet)}.search input:focus{border-color:var(--flame);box-shadow:0 0 0 3px rgba(232,75,26,.1)}
+    .shell{max-width:1500px;margin:auto;padding:34px 30px 64px}.intro{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:25px}.eyebrow{margin-bottom:6px;color:var(--flame);font-size:11px;font-weight:600;letter-spacing:1.1px;text-transform:uppercase}.intro h1{font:700 clamp(30px,4vw,48px)/.98 var(--display);letter-spacing:-1px}.intro-copy{max-width:380px;color:var(--muted);font-size:13px;line-height:1.55;text-align:right}.count{color:var(--quiet)}.count b{color:var(--ink);font-weight:600}
+    .filters-wrap{position:relative;margin-bottom:24px}.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 7px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filter{flex:none;height:34px;padding:0 14px;border:1px solid var(--rule-dark);border-radius:99px;background:var(--surface);color:var(--muted);font-size:12.5px;cursor:pointer;transition:.15s}.filter:hover{border-color:var(--ink);color:var(--ink)}.filter.active{border-color:var(--flame);background:var(--flame-wash);color:var(--flame);font-weight:600}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}.card{position:relative;display:block;overflow:hidden;border:1px solid var(--rule);border-radius:11px;background:var(--surface);color:inherit;text-decoration:none;animation:rise .3s ease both;transition:transform .22s cubic-bezier(.22,.68,0,1.2),box-shadow .22s,border-color .2s}.card:hover,.card:focus-visible{z-index:2;border-color:rgba(255,255,255,.15);outline:none;transform:translateY(-4px) scale(1.015);box-shadow:0 15px 42px rgba(0,0,0,.62)}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(140deg,var(--wash),var(--rule))}.thumb img{width:100%;height:100%;display:block;object-fit:cover;opacity:0;transition:opacity .25s,transform .4s cubic-bezier(.22,.68,0,1.2)}.thumb img.ready{opacity:1}.card:hover img{transform:scale(1.04)}.fallback{position:absolute;inset:0;display:grid;place-items:center;color:var(--quiet)}.fallback svg{width:26px;fill:currentColor;opacity:.55}
+    .resolution{position:absolute;top:9px;right:9px;padding:4px 8px;border:1px solid rgba(255,255,255,.16);border-radius:5px;background:rgba(20,20,20,.84);backdrop-filter:blur(5px);color:var(--ink);font-size:10px;font-weight:600;letter-spacing:.25px}.open-cue{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.3);opacity:0;transition:.18s}.open-cue span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--flame);box-shadow:0 3px 16px rgba(0,0,0,.45);transform:scale(.85);transition:.2s}.open-cue svg{width:16px;fill:none;stroke:#fff;stroke-width:1.8}.card:hover .open-cue,.card:focus-visible .open-cue{opacity:1}.card:hover .open-cue span,.card:focus-visible .open-cue span{transform:scale(1)}
+    .body{padding:13px 14px 15px}.category{margin-bottom:5px;color:var(--flame);font-size:10px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.title{font-size:14px;font-weight:500;line-height:1.42;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+    .state{grid-column:1/-1;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;color:var(--quiet)}.spinner{width:30px;height:30px;border:2px solid var(--rule-dark);border-top-color:var(--flame);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.state strong{color:var(--ink);font-size:15px}.state p{max-width:520px;font-size:13px;line-height:1.55}.retry{padding:8px 13px;border:1px solid var(--rule-dark);border-radius:8px;background:var(--surface);color:var(--ink);font-size:12px;cursor:pointer}
+    footer{padding-top:32px;color:var(--quiet);font-size:11px;text-align:center}
+    @media(max-width:700px){.topbar{height:auto;min-height:58px;padding:11px 14px;gap:10px}.brand-name{font-size:18px}.search{width:auto;flex:1}.search input{height:36px}.shell{padding:25px 14px 48px}.intro{display:block;margin-bottom:18px}.intro-copy{margin-top:10px;text-align:left}.grid{grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px}.body{padding:10px 11px 12px}.title{font-size:13px}.resolution{top:7px;right:7px}.open-cue{display:none}}
+    @media(max-width:410px){.brand-name{display:none}.grid{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" aria-label="Flam Flicks">
+      <span class="brand-mark"><svg viewBox="0 0 9 10" aria-hidden="true"><polygon points="1,1 8,5 1,9"/></svg></span>
+      <span class="brand-name">Flam Flicks</span>
+    </div>
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5"/><path d="M11 11l3.5 3.5"/></svg>
+      <input id="search" type="search" placeholder="Search campaigns…" autocomplete="off" aria-label="Search campaigns">
+    </label>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div><div class="eyebrow">Campaign library</div><h1>Flam Flicks</h1></div>
+      <p class="intro-copy">Browse campaign work by category. <span class="count"><b id="shownCount">0</b> of <span id="totalCount">0</span> flicks</span></p>
+    </section>
+    <nav class="filters-wrap" aria-label="Campaign categories"><div class="filters" id="filters"></div></nav>
+    <section class="grid" id="grid" aria-live="polite"><div class="state"><span class="spinner" aria-hidden="true"></span><p>Loading flicks…</p></div></section>
+    <footer>Flam Flicks</footer>
+  </main>
+
+  <script>
+    // Replace this one value after deploying Code.gs as a Google Apps Script web app.
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpzLQRooa2-ZyBkURExKIfzJ1bQYz2rug6nwkpN-s42I2_hKOeHTW8dR-pHog6dIuwUg/exec';
+
+    const state = { items: [], category: 'All', query: '' };
+    const grid = document.getElementById('grid');
+    const filters = document.getElementById('filters');
+    const search = document.getElementById('search');
+    const shownCount = document.getElementById('shownCount');
+    const totalCount = document.getElementById('totalCount');
+
+    function text(value) { return String(value ?? ''); }
+    function safeUrl(value) {
+      try { const url = new URL(text(value)); return /^https?:$/.test(url.protocol) ? url.href : ''; }
+      catch (_) { return ''; }
+    }
+    function thumbnailUrl(value) {
+      const url = safeUrl(value);
+      if (!url) return '';
+      const driveId = url.match(/\/d\/([\w-]+)/)?.[1] || url.match(/[?&]id=([\w-]+)/)?.[1];
+      return driveId ? `https://drive.google.com/thumbnail?id=${encodeURIComponent(driveId)}&sz=w1200` : url;
+    }
+    function el(tag, className, content) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (content !== undefined) node.textContent = content;
+      return node;
+    }
+    function renderFilters() {
+      const categories = [...new Set(state.items.map(x => x.category).filter(Boolean))].sort((a,b) => a.localeCompare(b));
+      filters.replaceChildren();
+      ['All', ...categories].forEach(category => {
+        const button = el('button', `filter${state.category === category ? ' active' : ''}`, category);
+        button.type = 'button'; button.setAttribute('aria-pressed', state.category === category);
+        button.addEventListener('click', () => { state.category = category; renderFilters(); renderCards(); });
+        filters.append(button);
+      });
+    }
+    function makeCard(item, index) {
+      const card = el('a', 'card');
+      card.href = safeUrl(item.link); card.target = '_blank'; card.rel = 'noopener noreferrer';
+      card.setAttribute('aria-label', `Open ${item.campaignName} in a new tab`);
+      card.style.animationDelay = `${Math.min(index * 25, 250)}ms`;
+      const thumb = el('div', 'thumb');
+      const fallback = el('div', 'fallback');
+      fallback.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+      thumb.append(fallback);
+      const src = thumbnailUrl(item.thumbnail);
+      if (src) {
+        const img = new Image(); img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+        img.addEventListener('load', () => img.classList.add('ready'));
+        img.src = src; thumb.append(img);
+      }
+      if (item.resolution) thumb.append(el('span', 'resolution', item.resolution));
+      const cue = el('span', 'open-cue'); cue.innerHTML = '<span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 13L14 6M9 6h5v5"/><path d="M12 11v4H5V8h4"/></svg></span>'; thumb.append(cue);
+      const body = el('div', 'body');
+      body.append(el('div', 'category', item.category || 'Uncategorized'), el('div', 'title', item.campaignName));
+      card.append(thumb, body); return card;
+    }
+    function renderCards() {
+      const q = state.query.trim().toLocaleLowerCase();
+      const visible = state.items.filter(item => (state.category === 'All' || item.category === state.category) && (!q || `${item.campaignName} ${item.category} ${item.resolution}`.toLocaleLowerCase().includes(q)));
+      shownCount.textContent = visible.length; totalCount.textContent = state.items.length; grid.replaceChildren();
+      if (!visible.length) {
+        const box = el('div', 'state'); box.append(el('strong', '', 'No flicks found'), el('p', '', 'Try another search or category.')); grid.append(box); return;
+      }
+      visible.forEach((item, index) => grid.append(makeCard(item, index)));
+    }
+    function showError(message) {
+      grid.replaceChildren(); const box = el('div', 'state'); box.append(el('strong', '', 'Couldn’t load the library'), el('p', '', message));
+      const retry = el('button', 'retry', 'Try again'); retry.type = 'button'; retry.addEventListener('click', loadData); box.append(retry); grid.append(box);
+    }
+    function loadData() {
+      if (!/^https:\/\/script\.google\.com\//.test(APPS_SCRIPT_URL)) { showError('Add your deployed Apps Script web app URL to the APPS_SCRIPT_URL constant in index.html.'); return; }
+      grid.innerHTML = '<div class="state"><span class="spinner" aria-hidden="true"></span><p>Loading flicks…</p></div>';
+      const callback = `flamFlicks_${Date.now()}`; const script = document.createElement('script');
+      const timer = setTimeout(() => finish(new Error('The data request timed out. Check the deployment URL and web app access setting.')), 15000);
+      function finish(error, payload) { clearTimeout(timer); delete window[callback]; script.remove(); if (error) return showError(error.message); if (!payload?.ok) return showError(payload?.error || 'The sheet returned an error.'); state.items = Array.isArray(payload.items) ? payload.items.filter(x => x.campaignName && safeUrl(x.link)) : []; state.category = 'All'; renderFilters(); renderCards(); }
+      window[callback] = payload => finish(null, payload);
+      script.onerror = () => finish(new Error('The endpoint could not be reached. Confirm that it is deployed for Anyone access.'));
+      script.src = `${APPS_SCRIPT_URL}${APPS_SCRIPT_URL.includes('?') ? '&' : '?'}callback=${encodeURIComponent(callback)}&v=${Date.now()}`;
+      document.head.append(script);
+    }
+    search.addEventListener('input', event => { state.query = event.target.value; renderCards(); });
+    loadData();
+  </script>
+</body>
+</html>
