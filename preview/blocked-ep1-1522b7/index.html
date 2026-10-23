@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="BLOCKED · Episode 1 (interactive preview)">
+<meta property="og:image" content="media/cover.jpg">
+<style>[hidden]{display:none!important}</style>
+<title>BLOCKED Flicks Player</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one phone-sized 9:16 stage beside an info rail; flicks, ad and endings live inside the stage. Single dark screening-room look. */
+:root{
+  --ink:#0c0a0f; --surface:#17141c; --line:#2a2531; --text:#f3eff5; --muted:#9b93a5; --signal:#e2283c; --gold:#ffd166;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif; --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--ink);color:var(--text);font-family:var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 28px}
+.wrap{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:start}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr);justify-items:center;gap:24px}.col{order:-1}.info{padding-top:0}}
+.info{display:grid;gap:20px;align-content:start;padding-top:12px;max-width:440px;min-width:0}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-stretch:68%;font-weight:900;font-size:clamp(56px,9vw,96px);line-height:.86;letter-spacing:-.01em;margin:6px 0 0;text-wrap:balance}
+h1 span{display:block;height:8px;width:62%;background:var(--signal);margin-top:12px}
+.logline{color:#cfc8d6;font-size:15px;line-height:1.55;margin:0;max-width:62ch}
+.howto{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.howto li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:baseline;font-size:14px;line-height:1.45;color:#d9d3df}
+.howto b{font:500 12px/1 var(--mono);color:var(--muted)}
+.howto li.br b{color:var(--gold)}
+.path{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:10px}
+.path .row{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.path .row span:first-child{color:var(--muted)}.path .row span:last-child{font-weight:600;text-align:right}
+.path .row.end span:last-child{color:var(--gold)}
+.jump{display:flex;flex-wrap:wrap;gap:8px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--text);font:500 13px/1 var(--body);padding:9px 12px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:#4a4253}.chip .tc{font-family:var(--mono);color:var(--muted);margin-left:6px}
+.chip:focus-visible,.ic:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.col{display:grid;gap:12px;justify-items:center;width:100%}
+.stage{width:min(100%,400px,calc((100svh - 150px) * 9 / 16));box-shadow:0 0 0 1px #2c2733,0 30px 80px -20px rgba(0,0,0,.8)}
+.controls{display:flex;gap:8px;align-items:center;width:min(100%,400px);justify-content:space-between}
+.controls .grp{display:flex;gap:8px}
+.ic{appearance:none;height:40px;min-width:40px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--text);font:600 13px/1 var(--body);cursor:pointer}
+.time{font:500 13px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.fp{position:relative;aspect-ratio:9/16;max-width:100%;overflow:hidden;background:#000;container-type:inline-size;border-radius:26px}
+.fp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.fp .fp-ov{opacity:0;transition:opacity .12s linear}.fp .fp-ov.on{opacity:1}
+.fp .fp-end{transition:none}
+.fp-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:5}.fp-flash.go{animation:fpflash .32s ease-out}
+@keyframes fpflash{0%{opacity:.35}100%{opacity:0}}
+.fp-bar{position:absolute;left:12px;right:12px;bottom:9px;height:3px;border-radius:2px;background:rgba(255,255,255,.22);z-index:9;cursor:pointer}
+.fp-bar::before{content:"";position:absolute;inset:-8px 0}
+.fp-bar i{position:absolute;inset:0 auto 0 0;background:#fff;border-radius:2px;width:0}
+.fp-bar em{position:absolute;top:-2px;height:7px;background:#e2283c;border-radius:2px}
+.fp-bar b{position:absolute;top:-5px;width:3px;height:13px;background:#ffd166;border-radius:2px;transform:translateX(-1px)}
+.fp-start{position:absolute;inset:0;z-index:20;display:grid;place-items:end center;padding-bottom:16%;background:center/cover no-repeat #000}
+.fp-start::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.55))}
+.fp-start button{position:relative;z-index:1;border:0;cursor:pointer;background:#e2283c;color:#fff;font:700 14px/1 system-ui,sans-serif;padding:14px 20px;border-radius:99px;box-shadow:0 10px 30px -8px rgba(226,40,60,.7)}
+.fp-switch{position:absolute;left:0;right:0;bottom:0;z-index:8;padding:16cqw 3.5cqw 7cqw;display:grid;gap:3cqw;background:linear-gradient(180deg,transparent,rgba(0,0,0,.62) 22%,rgba(0,0,0,.88) 48%);transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.fp-switch.show{transform:none}
+.fp-q{display:grid;gap:1.6cqw;color:#fff;justify-items:start}
+.fp-q>span{order:-1;display:inline-flex;align-items:center;gap:1.4cqw;font:700 2.7cqw/1 ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;background:#e2283c;color:#fff;padding:1.5cqw 2.4cqw;border-radius:99px;white-space:nowrap}
+.fp-q>span::before{content:"";width:1.6cqw;height:1.6cqw;border-radius:50%;background:#fff;animation:fpdot 1.2s ease-in-out infinite}
+@keyframes fpdot{50%{opacity:.25}}
+.fp-q strong{display:block;font:800 6.4cqw/1.08 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.015em;text-wrap:balance;text-shadow:0 .4cqw 2.4cqw rgba(0,0,0,.6)}
+.fp-q em{display:block;font:600 3.4cqw/1.3 system-ui,sans-serif;font-style:normal;color:#ffd166;margin-top:1.2cqw}
+.fp-q em:empty{display:none}
+.fp-switch.show .fp-q strong{animation:fpq .5s cubic-bezier(.2,.8,.2,1) both .12s}
+@keyframes fpq{from{opacity:0;transform:translateY(3cqw)}to{opacity:1;transform:none}}
+.fp-thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.6cqw}
+.fp-thumb{appearance:none;padding:0;border:0;cursor:pointer;border-radius:3.4cqw;overflow:hidden;background:#222;aspect-ratio:1/1;position:relative;box-shadow:0 0 0 2px rgba(255,255,255,.25);transition:transform .15s,box-shadow .15s}
+.fp-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.fp-thumb span{position:absolute;left:0;right:0;bottom:0;padding:5cqw 2cqw 1.8cqw;font:600 2.7cqw/1.15 system-ui,sans-serif;color:#fff;text-align:left;background:linear-gradient(180deg,transparent,rgba(0,0,0,.8))}
+.fp-thumb.sel{box-shadow:0 0 0 3px #fff,0 0 0 6px #e2283c;transform:translateY(-1.2cqw)}
+.fp-thumb:focus-visible{outline:2px solid #ffd166;outline-offset:3px}
+.fp-timer{height:1cqw;border-radius:1cqw;background:rgba(255,255,255,.2);overflow:hidden}.fp-timer i{display:block;height:100%;background:#fff;transform-origin:left}
+.fp-ad{position:absolute;z-index:7;left:3.5cqw;right:3.5cqw;top:24cqw;display:grid;grid-template-columns:15cqw minmax(0,1fr) auto;gap:3cqw;align-items:center;background:#fbf8f4;color:#1b1714;border-radius:4cqw;padding:2.6cqw;box-shadow:0 12px 30px -10px rgba(0,0,0,.6);transform:translateY(-8cqw);opacity:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s;pointer-events:none}
+.fp-ad.show{transform:none;opacity:1;pointer-events:auto}
+.fp-ad img{width:15cqw;height:15cqw;border-radius:2.6cqw;object-fit:cover}.fp-ad .m{display:grid;gap:1cqw;min-width:0}
+.fp-ad .t{display:flex;gap:1.6cqw;align-items:center}.fp-ad .tag{font:700 2.5cqw/1 ui-monospace,monospace;letter-spacing:.1em;border:1px solid currentColor;padding:.8cqw 1.4cqw;border-radius:1cqw;color:#6b625a}
+.fp-ad .br{font:800 3.4cqw/1 system-ui,sans-serif;letter-spacing:.04em;color:#b8643f}.fp-ad .pr{font:600 3.5cqw/1.25 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fp-ad .pc{font:500 3cqw/1 ui-monospace,monospace;color:#6b625a}
+.fp-ad a{background:#1b1714;color:#fbf8f4;font:700 3.2cqw/1 system-ui,sans-serif;padding:2.8cqw 3.4cqw;border-radius:99px;white-space:nowrap;text-decoration:none}
+.fp-toast{position:absolute;z-index:30;left:50%;top:44%;transform:translate(-50%,-50%);background:rgba(20,18,24,.92);color:#fff;font:500 3.4cqw/1.4 system-ui,sans-serif;padding:3cqw 4cqw;border-radius:3cqw;width:78%;text-align:center;opacity:0;transition:opacity .2s;pointer-events:none}.fp-toast.show{opacity:1}
+.fp-endcard{position:absolute;inset:0;z-index:15;display:grid;place-items:center;background:rgba(6,5,8,.86);backdrop-filter:blur(6px);padding:8cqw;color:#fff;text-align:center}
+.fp-ec-in{display:grid;gap:3cqw;justify-items:center}
+.fp-endcard small{font:600 2.8cqw/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#ffd166}
+.fp-endcard h3{margin:0;font:800 8cqw/1.05 system-ui,sans-serif;letter-spacing:-.01em}
+.fp-endcard p{margin:0;font:400 3.6cqw/1.45 system-ui,sans-serif;color:#d8d2de;max-width:60ch}
+.fp-ec-btns{display:flex;gap:2.4cqw;flex-wrap:wrap;justify-content:center;margin-top:2cqw}
+.fp-ec-btns button{appearance:none;border:0;cursor:pointer;font:700 3.4cqw/1 system-ui,sans-serif;padding:3cqw 4.4cqw;border-radius:99px;background:#fff;color:#111}
+.fp-ec-btns button[data-ec="other"]{background:#e2283c;color:#fff}
+.fp-ec-map{display:grid;gap:1.4cqw;margin-top:3cqw;font:500 3cqw/1.3 system-ui,sans-serif;color:#a49dac}
+.fp-ec-map span.on{color:#fff;font-weight:700}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="info" aria-label="About this episode">
+    <div><div class="eyebrow">Flam Flicks · Microdrama · Episode 01</div><h1>BLOCKED<span></span></h1></div>
+    <p class="logline">At 11:47 PM, Aanya is dumped and blocked by her boyfriend of three years. An anonymous text, a café story and a butterfly bracelet point at the people she trusts most. What you choose decides who it is.</p>
+    <ul class="howto">
+      <li><b>0:28</b><span>Flick 1 · product swap. Pick the mugs in Kabir's café story. At 0:50 the same mug sits on Rhea's study table with Rhea right behind it, and the ad card follows your pick.</span></li>
+      <li class="br"><b>1:13</b><span>Flick 2 · environment swap. Pick where Rhea had breakfast. That choice decides the ending at 1:26.</span></li>
+      <li><b>Tap</b><span>a thumbnail and the shot swaps on the same frame. Dialogue and score keep running.</span></li>
+    </ul>
+    <div class="path" aria-live="polite">
+      <div class="row"><span>Mugs</span><span id="p1">Tea-garden print</span></div>
+      <div class="row"><span>Breakfast</span><span id="p2">Hostel mess</span></div>
+      <div class="row end"><span>Ending</span><span id="p3">The other girl</span></div>
+    </div>
+    <div class="jump">
+      <button class="chip" data-jump="0" type="button">Start<span class="tc">0:00</span></button>
+      <button class="chip" data-jump="26.5" type="button">Flick 1<span class="tc">0:28</span></button>
+      <button class="chip" data-jump="71.5" type="button">Flick 2<span class="tc">1:13</span></button>
+      <button class="chip" data-jump="86" type="button">Ending<span class="tc">1:26</span></button>
+    </div>
+  </section>
+  <div class="col">
+    <div class="fp stage" id="stage"></div>
+    <div class="controls">
+      <div class="grp"><button class="ic" id="pp" type="button">Play</button><button class="ic" id="mute" type="button">Mute</button><button class="ic" id="restart" type="button">Restart</button></div>
+      <span class="time" id="time">0:00 / 1:49</span>
+    </div>
+  </div>
+</div>
+<script>
+/* Flicks player engine: linear main video + in-sync flick overlays + linked overlays + branched endings.
+   cfg = { main, poster, duration, flicks:[{id,name,t0,t1,q,hint,ad:{brand,cta},v:[{id,label,video,thumb,prod,price}]}],
+           linked:[{flick,t0,t1,v:{B:url,C:url}}], endings:{by,t0,v:{A:{video,title,summary},...}} }
+   hooks = { time(t,dur), state(playing,muted), path(choice,cfg), ended(info), toast(msg) } */
+function FlicksPlayer(root, cfg, hooks){
+  hooks=hooks||{}; const DUR=cfg.duration||109, FL=cfg.flicks||[], LK=cfg.linked||[], EN=cfg.endings||null;
+  const BR=EN?EN.t0:DUR; const choice={}; FL.forEach(f=>choice[f.id]='A');
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  root.innerHTML=`<video class="fp-main" src="${esc(cfg.main)}" playsinline preload="auto"></video><div class="fp-flash"></div>
+   <div class="fp-ad" aria-label="Sponsored"><img alt=""><div class="m"><div class="t"><span class="tag">AD</span><span class="br"></span></div><div class="pr"></div><div class="pc"></div></div><a href="#">Shop</a></div>
+   <div class="fp-switch" role="group" aria-label="Choose a version"><div class="fp-q"><div><strong></strong><em></em></div><span>Flick</span></div><div class="fp-thumbs"></div><div class="fp-timer"><i></i></div></div>
+   <div class="fp-bar"><i></i></div><div class="fp-toast"></div>
+   <div class="fp-endcard" hidden><div class="fp-ec-in"><small></small><h3></h3><p></p><div class="fp-ec-btns"><button type="button" data-ec="other">Try another ending</button><button type="button" data-ec="again">Watch again</button></div><div class="fp-ec-map"></div></div></div>
+   <div class="fp-start" style="background-image:url('${esc(cfg.poster||'')}')"><button type="button">Play episode</button></div>`;
+  const q=s=>root.querySelector(s), main=q('.fp-main'), sw=q('.fp-switch'), th=q('.fp-thumbs'), ad=q('.fp-ad');
+  const mk=(src,muted)=>{ const el=document.createElement('video'); el.src=src; el.muted=!!muted; el.playsInline=true; el.preload='auto'; el.className='fp-ov'; root.insertBefore(el,q('.fp-flash')); return el; };
+  const ovs={}; FL.forEach(f=>f.v.forEach(v=>{ if(v.video) ovs[f.id+v.id]=mk(v.video,true); }));
+  const lks=LK.map(l=>({...l, els:Object.fromEntries(Object.entries(l.v).map(([k,u])=>[k,mk(u,true)]))}));
+  const ends={}; if(EN) Object.entries(EN.v).forEach(([k,e])=>{ const el=mk(e.video,false); el.classList.add('fp-end'); ends[k]=el; el.addEventListener('ended',()=>showEnd(k)); });
+  let phase='main', curEnd=null, active=null, raf=0, tt, muted=false, started=false;
+  FL.forEach(f=>{ const m=document.createElement('em'); m.style.left=(f.t0/DUR*100)+'%'; m.style.width=((f.t1-f.t0)/DUR*100)+'%'; q('.fp-bar').appendChild(m); });
+  if(EN){ const m=document.createElement('b'); m.style.left=(BR/DUR*100)+'%'; q('.fp-bar').appendChild(m); }
+  const media=()=>phase==='end'&&curEnd?ends[curEnd]:main;
+  const now=()=>phase==='end'&&curEnd?BR+ends[curEnd].currentTime:main.currentTime;
+  const endingFor=()=>EN?choice[EN.by]:null;
+  const emit=()=>{ hooks.state&&hooks.state(!media().paused, muted); };
+  const path=()=>hooks.path&&hooks.path(choice,cfg);
+  const toast=m=>{ const t=q('.fp-toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2400); hooks.toast&&hooks.toast(m); };
+  const setAd=f=>{ if(!f.ad) return; const v=f.v.find(x=>x.id===choice[f.id]); q('.fp-ad img').src=v.thumb; q('.fp-ad .br').textContent=f.ad.brand; q('.fp-ad .pr').textContent=v.prod||''; q('.fp-ad .pc').textContent=v.price||''; q('.fp-ad a').textContent=f.ad.cta||'Shop'; };
+  function syncEl(el,target,force){ if(force||Math.abs(el.currentTime-target)>0.12) el.currentTime=Math.max(0,target); if(main.paused){ if(!el.paused) el.pause(); } else if(el.paused) el.play().catch(()=>{}); const show=()=>el.classList.add('on'); el.readyState>=2?show():el.addEventListener('loadeddata',show,{once:true}); }
+  function sync(force){
+    const t=main.currentTime, want=new Set();
+    if(phase==='main'){
+      if(active&&choice[active.id]!=='A'){ const el=ovs[active.id+choice[active.id]]; want.add(el); syncEl(el,t-active.t0,force); }
+      lks.forEach(l=>{ if(t>=l.t0-0.02&&t<l.t1){ const k=choice[l.flick]; const el=l.els[k]; if(el){ want.add(el); syncEl(el,t-l.t0,force); } } });
+    }
+    root.querySelectorAll('.fp-ov:not(.fp-end)').forEach(o=>{ if(!want.has(o)){ o.classList.remove('on'); if(!o.paused) o.pause(); } });
+  }
+  function pick(f,id){ if(choice[f.id]===id) return; choice[f.id]=id; [...th.children].forEach((b,i)=>{const on=f.v[i].id===id; b.classList.toggle('sel',on); b.setAttribute('aria-pressed',on);});
+    setAd(f); path(); const fl=q('.fp-flash'); fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go'); sync(true);
+    if(EN&&f.id===EN.by) toast('Ending locked: '+EN.v[id].title); }
+  function build(f){ q('.fp-q>span').textContent='Flick '+(FL.indexOf(f)+1)+' · tap to choose'; q('.fp-q strong').textContent=f.q||''; q('.fp-q em').textContent=f.hint||''; th.innerHTML='';
+    f.v.forEach(v=>{ const b=document.createElement('button'); b.type='button'; b.className='fp-thumb'+(choice[f.id]===v.id?' sel':''); b.setAttribute('aria-label',v.label); b.setAttribute('aria-pressed',choice[f.id]===v.id); b.innerHTML=`<img src="${esc(v.thumb)}" alt=""><span>${esc(v.label)}</span>`; b.onclick=()=>pick(f,v.id); th.appendChild(b); }); }
+  function startEnding(offset){ if(!EN) return; const k=endingFor(); Object.entries(ends).forEach(([kk,el])=>{ if(kk!==k){ el.pause(); el.classList.remove('on'); } });
+    const el=ends[k]; curEnd=k; phase='end'; main.pause(); el.muted=muted; el.currentTime=Math.max(0,offset||0); el.classList.add('on'); sw.classList.remove('show'); ad.classList.remove('show'); active=null; sync(true);
+    el.play().catch(()=>{}); emit(); }
+  function leaveEnding(){ Object.values(ends).forEach(el=>{ el.pause(); el.classList.remove('on'); }); phase='main'; curEnd=null; q('.fp-endcard').hidden=true; }
+  function showEnd(k){ const e=EN.v[k], ec=q('.fp-endcard'); ec.querySelector('small').textContent='Your ending · '+(EN.label||'decided by your choice'); ec.querySelector('h3').textContent=e.title; ec.querySelector('p').textContent=e.summary||'';
+    ec.querySelector('.fp-ec-map').innerHTML=Object.entries(EN.v).map(([kk,v])=>`<span class="${kk===k?'on':''}">${esc((FL.find(f=>f.id===EN.by)||{v:[]}).v.find(x=>x.id===kk)?.label||kk)} → ${esc(v.title)}</span>`).join('');
+    ec.hidden=false; emit(); hooks.ended&&hooks.ended({ending:k,title:e.title}); }
+  function seek(t){ q('.fp-endcard').hidden=true; if(EN&&t>=BR){ startEnding(t-BR); return; } leaveEnding(); main.currentTime=t; if(started) main.play().catch(()=>{}); }
+  function tick(){ const t=now(); q('.fp-bar i').style.width=(t/DUR*100)+'%'; hooks.time&&hooks.time(t,DUR);
+    if(phase==='main'){
+      if(EN&&main.currentTime>=BR-0.04&&!main.paused){ startEnding(0); }
+      const f=FL.find(x=>main.currentTime>=x.t0-0.04&&main.currentTime<x.t1-0.05)||null;
+      if(f!==active){ active=f; ad.classList.remove('show'); if(f){ build(f); sw.classList.add('show'); if(f.ad){ setAd(f); ad.classList.add('show'); } } else sw.classList.remove('show'); sync(true); }
+      else sync(false);
+      if(active) q('.fp-timer i').style.transform=`scaleX(${Math.max(0,1-(main.currentTime-active.t0)/(active.t1-active.t0))})`;
+      FL.forEach(x=>{ if(main.currentTime>x.t0-4&&main.currentTime<x.t0) x.v.forEach(v=>{const o=ovs[x.id+v.id]; if(o&&o.currentTime>0.05)o.currentTime=0;}); });
+      if(EN&&main.currentTime>BR-5) Object.values(ends).forEach(o=>{ if(o.currentTime>0.05&&o.paused) o.currentTime=0; });
+    }
+    raf=requestAnimationFrame(tick); }
+  raf=requestAnimationFrame(tick);
+  main.addEventListener('ended',()=>{ if(EN&&phase==='main') startEnding(0); });
+  ['play','pause'].forEach(ev=>{ main.addEventListener(ev,()=>{ emit(); sync(true); }); Object.values(ends).forEach(el=>el.addEventListener(ev,emit)); });
+  main.addEventListener('seeked',()=>sync(true));
+  q('.fp-bar').onclick=e=>{ const r=e.currentTarget.getBoundingClientRect(); seek((e.clientX-r.left)/r.width*DUR); };
+  q('.fp-ad a').onclick=e=>{ e.preventDefault(); const f=FL.find(x=>x.ad); const v=f&&f.v.find(x=>x.id===choice[f.id]); toast(`Demo CTA. In the live Flick this opens ${f?.ad?.brand||'the brand'}${v?' for the '+v.label.toLowerCase()+' set':''}.`); };
+  q('.fp-endcard').addEventListener('click',e=>{ const b=e.target.closest('[data-ec]'); if(!b) return; if(b.dataset.ec==='again') seek(0); else { const f=FL.find(x=>x.id===EN.by); seek(Math.max(0,f.t0-1.5)); } });
+  const api={
+    start(){ q('.fp-start').hidden=true; started=true; main.play().catch(()=>{ muted=true; main.muted=true; main.play(); emit(); }); },
+    toggle(){ if(!started) return api.start(); const m=media(); if(!q('.fp-endcard').hidden) return seek(0); m.paused?m.play().catch(()=>{}):m.pause(); },
+    pause(){ media().pause(); }, isStarted:()=>started,
+    mute(v){ muted=v===undefined?!muted:v; main.muted=muted; Object.values(ends).forEach(el=>el.muted=muted); emit(); },
+    seek, choice, flicks:FL,
+    restart(){ seek(0); if(!started) api.start(); },
+    destroy(){ cancelAnimationFrame(raf); main.pause(); root.querySelectorAll('video').forEach(v=>v.pause()); root.innerHTML=''; }
+  };
+  q('.fp-start button').onclick=()=>api.start();
+  path(); emit();
+  return api;
+}
+
+const CFG={"main": "media/main.mp4", "poster": "media/cover.jpg", "duration": 109, "flicks": [{"id": "F1", "name": "Mugs", "t0": 28, "t1": 40, "q": "Which mugs did he share with her?", "hint": "Watch for this mug again.", "ad": {"brand": "TERRA & KILN", "cta": "Shop the pair"}, "v": [{"id": "A", "label": "Tea-garden print", "thumb": "media/F1_A.jpg", "prod": "Chai Bagh Mug Pair · Block Print", "price": "₹1,490 · set of 2"}, {"id": "B", "label": "Cherry pinstripe", "video": "media/F1_B.mp4", "thumb": "media/F1_B.jpg", "prod": "Diner Mug Pair · Cherry Pinstripe", "price": "₹1,290 · set of 2"}, {"id": "C", "label": "Forest dip", "video": "media/F1_C.mp4", "thumb": "media/F1_C.jpg", "prod": "Dip Mug Pair · Forest Green", "price": "₹1,390 · set of 2"}]}, {"id": "F2", "name": "Breakfast", "t0": 73, "t1": 85, "q": "Where was Rhea this morning?", "hint": "Your choice decides the ending.", "v": [{"id": "A", "label": "Hostel mess", "thumb": "media/F2_A.jpg"}, {"id": "B", "label": "Garden terrace", "video": "media/F2_B.mp4", "thumb": "media/F2_B.jpg"}, {"id": "C", "label": "Monsoon verandah", "video": "media/F2_C.mp4", "thumb": "media/F2_C.jpg"}]}], "linked": [{"flick": "F1", "t0": 50, "t1": 52, "v": {"B": "media/INS_B.mp4", "C": "media/INS_C.mp4"}}], "endings": {"by": "F2", "t0": 86, "label": "decided by where Rhea had breakfast", "v": {"A": {"video": "media/END_A.mp4", "title": "The other girl", "summary": "She wore the bracelet at breakfast, so she lied. Kabir calls her at midnight, and Rhea is the other girl."}, "B": {"video": "media/END_B.mp4", "title": "Kabir's terrace", "summary": "That terrace is Kabir's PG. Rhea was at his place this morning. Aanya calls him on speaker, throws Rhea out and blocks her."}, "C": {"video": "media/END_C.mp4", "title": "August rain", "summary": "It hasn't rained in weeks. The clip is from August, so Tara lied, and she sent the anonymous text. Kabir was hers first."}}}};
+const $=id=>document.getElementById(id);
+const fmt=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const P=FlicksPlayer($('stage'),CFG,{
+  time:(t,d)=>{ $('time').textContent=fmt(t)+' / '+fmt(d); },
+  state:(playing,muted)=>{ $('pp').textContent=playing?'Pause':'Play'; $('mute').textContent=muted?'Unmute':'Mute'; },
+  path:(c,cfg)=>{ const l=(fid)=>cfg.flicks.find(f=>f.id===fid).v.find(v=>v.id===c[fid]).label; $('p1').textContent=l('F1'); $('p2').textContent=l('F2'); $('p3').textContent=cfg.endings.v[c[cfg.endings.by]].title; }
+});
+$('pp').onclick=()=>P.toggle(); $('mute').onclick=()=>P.mute(); $('restart').onclick=()=>P.restart();
+document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>{ if(!P.isStarted()) P.start(); P.seek(+b.dataset.jump); });
+document.addEventListener('keydown',e=>{ if(e.code==='Space'&&e.target===document.body){e.preventDefault();P.toggle();} });
+</script>
+
+</body>
+</html>
