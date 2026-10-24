@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>NISHI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--ink:#070a09;--fg:#eef0ec;--muted:#a9b1ac;--turmeric:#e3b23c;--glass:rgba(18,22,20,.62);--display:"Cormorant Garamond",Georgia,serif;--body:"IBM Plex Sans",system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--ink);color:var(--fg);font-family:var(--body);overflow:hidden}
+[hidden]{display:none!important}
+#stage{position:fixed;inset:0;display:grid;place-items:center;background:#000}
+#frame{position:relative;height:100%;aspect-ratio:9/16;max-width:100vw;overflow:hidden;background:#000}
+@media (max-aspect-ratio:9/16){#frame{width:100vw;height:auto;aspect-ratio:9/16}}
+video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .12s linear;transform-origin:50% 45%}
+video.on{opacity:1}
+video.hold{transition:transform 9s ease-out,filter .6s,opacity .12s;transform:scale(1.07);filter:brightness(.62) saturate(.85)}
+.vign{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 80% at 50% 40%,transparent 55%,rgba(0,0,0,.55));z-index:2}
+/* controls */
+#ctl{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px;z-index:20;display:flex;gap:8px}
+#ctl button{width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.42);color:#fff;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}
+#ctl button:focus-visible{outline:2px solid var(--turmeric)}
+#ctl svg{width:18px;height:18px}
+#tap{position:absolute;inset:0;z-index:5}
+#pauseInd{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;width:72px;height:72px;border-radius:50%;background:rgba(0,0,0,.45);display:grid;place-items:center;pointer-events:none}
+#pauseInd svg{width:30px;height:30px}
+/* subtitles */
+#subs{position:absolute;left:6%;right:24%;bottom:9%;z-index:8;text-align:left;pointer-events:none}
+#subs .hi{font:500 clamp(14px,2.1vh,19px)/1.3 var(--body);text-shadow:0 1px 6px rgba(0,0,0,.9);margin:0}
+#subs .en{font:400 clamp(11px,1.6vh,14px)/1.3 var(--body);color:#cfd4d0;text-shadow:0 1px 5px rgba(0,0,0,.9);margin:3px 0 0}
+#subs.meera .hi{color:#f3d27a;font-style:italic}
+#subs.full{right:6%}
+/* phone cards */
+#cards{position:absolute;top:calc(max(12px,env(safe-area-inset-top)) + 52px);left:5%;right:5%;z-index:9;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.card{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:11px 14px;display:flex;gap:11px;align-items:center;box-shadow:0 8px 30px rgba(0,0,0,.4);animation:cin .35s ease-out}
+@keyframes cin{from{transform:translateY(-10px);opacity:0}to{transform:none;opacity:1}}
+.card .av{width:36px;height:36px;border-radius:50%;flex:0 0 36px;background:linear-gradient(135deg,#e3b23c,#9a6b10);display:grid;place-items:center;font:600 15px var(--body);color:#1a1205}
+.card .av.g{background:linear-gradient(135deg,#3fbf6f,#1d7a40);color:#fff}
+.card .av.r{background:linear-gradient(135deg,#e5484d,#8e1d21);color:#fff}
+.card .t1{font:600 13px var(--body)}
+.card .t2{font:400 12px var(--body);color:#c8cec9;margin-top:2px}
+.card .pulse{width:9px;height:9px;border-radius:50%;background:#3fbf6f;margin-left:auto;animation:pl 1s infinite}
+@keyframes pl{50%{opacity:.25}}
+.wave{display:flex;gap:2px;align-items:center;height:16px;margin-top:4px}
+.wave i{width:3px;background:#e3b23c;border-radius:2px;animation:wv .8s infinite ease-in-out}
+@keyframes wv{0%,100%{height:4px}50%{height:15px}}
+/* flick rail */
+#hold{position:absolute;inset:0;z-index:12;pointer-events:none}
+#q{position:absolute;left:6%;right:28%;top:22%;pointer-events:none}
+#q .k{font:600 11px var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--turmeric)}
+#q h2{font:600 clamp(24px,4.2vh,38px)/1.05 var(--display);margin:6px 0 0;text-wrap:balance;text-shadow:0 2px 14px rgba(0,0,0,.8)}
+#rail{position:absolute;right:3.2%;top:46%;bottom:12%;width:21%;display:flex;flex-direction:column;justify-content:space-between;gap:2%;pointer-events:auto}
+.opt{position:relative;flex:1;min-height:0;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,.22);background:#111;padding:0;cursor:pointer;animation:rin .45s both cubic-bezier(.2,.8,.2,1);box-shadow:0 6px 20px rgba(0,0,0,.5)}
+.opt:nth-child(2){animation-delay:.07s}.opt:nth-child(3){animation-delay:.14s}
+@keyframes rin{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
+.opt img{width:100%;height:100%;object-fit:cover;display:block}
+.opt span{position:absolute;left:0;right:0;bottom:0;padding:14px 6px 6px;font:600 clamp(9px,1.25vh,12px)/1.15 var(--body);text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.85));color:#fff}
+.opt.sel{border-color:#fff;box-shadow:0 0 0 2px #000,0 6px 20px rgba(0,0,0,.5)}
+.opt:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px}
+#timer{position:absolute;right:3.2%;width:21%;bottom:9.5%;height:3px;border-radius:2px;background:rgba(255,255,255,.18);overflow:hidden}
+#timer i{display:block;height:100%;width:100%;background:var(--turmeric);transform-origin:left}
+/* cover + cards */
+.screen{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;justify-content:flex-end;padding:0 8% 14%;background:linear-gradient(transparent 30%,rgba(0,0,0,.92) 78%)}
+.screen.center{justify-content:center;align-items:center;text-align:center;background:#000;padding:0 10%}
+.screen .eyebrow{font:600 11px var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--turmeric)}
+.screen h1{font:600 clamp(54px,10vh,92px)/0.9 var(--display);margin:8px 0 6px;letter-spacing:.04em}
+.screen p{margin:0;color:var(--muted);font-size:14px;line-height:1.5;max-width:36ch}
+.screen .quote{font:500 clamp(22px,3.4vh,32px)/1.2 var(--display);color:var(--fg);max-width:22ch;margin:0 auto}
+.screen .quote small{display:block;font:400 13px var(--body);color:var(--muted);margin-top:10px}
+.btn{margin-top:22px;align-self:flex-start;border:0;border-radius:999px;padding:13px 22px;background:var(--turmeric);color:#170f02;font:600 15px var(--body);cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.screen.center .btn{align-self:center}
+.btn.ghost{background:rgba(255,255,255,.1);color:#fff}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#coverBg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;filter:brightness(.8)}
+.recap{margin-top:14px;font-size:12px;color:var(--muted)}
+.recap b{color:var(--fg);font-weight:500}
+#title{position:absolute;left:0;right:0;top:38%;z-index:10;text-align:center;pointer-events:none;animation:tf 3.4s both}
+#title .e{font:600 11px var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--turmeric)}
+#title .n{font:600 clamp(40px,7vh,64px)/1 var(--display);letter-spacing:.06em;margin-top:6px}
+#title .s{font:500 clamp(16px,2.4vh,22px) var(--display);font-style:italic;color:#d9ddd9;margin-top:4px}
+@keyframes tf{0%{opacity:0}18%{opacity:1}75%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){video.hold{transform:none}.opt,.card,#title{animation:none}}
+</style>
+</head>
+<body>
+<div id="stage"><div id="frame">
+  <video id="vA" playsinline preload="auto"></video>
+  <video id="vB" playsinline preload="auto"></video>
+  <div class="vign"></div>
+  <div id="tap"></div>
+  <div id="pauseInd" hidden><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div>
+  <div id="cards"></div>
+  <div id="subs" hidden><p class="hi"></p><p class="en"></p></div>
+  <div id="hold" hidden><div id="q"><div class="k"></div><h2></h2></div><div id="rail"></div><div id="timer"><i></i></div></div>
+  <div id="ctl" hidden>
+    <button id="bMute" aria-label="Mute"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4z"/><path id="mw" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
+    <button id="bFs" aria-label="Fullscreen"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <button id="bClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div id="cover" class="screen">
+    <img id="coverBg" src="thumbs/cover.jpg" alt="">
+    <div class="eyebrow">Frays by Flam · Interactive microdrama</div>
+    <h1>NISHI</h1>
+    <p>Thirteen days after Meera drowned in the Hooghly, her voice note arrives at 3:31 AM. The Nishi calls three times. You decide who it calls.</p>
+    <button class="btn" id="bStart"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>Play Episode 1</button>
+  </div>
+  <div id="card" class="screen center" hidden></div>
+</div></div>
+<script>
+const CLIPS={"E1S1": {"dur": 8.042, "subs": []}, "F1_T": {"dur": 6.042, "subs": [{"t": 1.8, "d": 3.8, "hi": "Tara… darwaza khol na. Tune phone kyun nahi uthaya?", "en": "Tara… open the door. Why didn't you pick up?", "who": "meera"}]}, "F1_A": {"dur": 6.042, "subs": [{"t": 1.8, "d": 3.8, "hi": "Ajay… darwaza khol na. Tune record kyun kiya?", "en": "Ajay… open the door. Why did you record it?", "who": "meera"}]}, "F1_D": {"dur": 6.042, "subs": [{"t": 1.8, "d": 3.65, "hi": "Dida… darwaza khol na. Aapne mujhe wapas kyun bheja?", "en": "Dida… open the door. Why did you send me back?", "who": "meera"}]}, "S2_T": {"dur": 12.25, "subs": [{"t": 3.7, "d": 5.7, "hi": "Teen baar bulaungi. Teesri baar jawab diya… toh paani tak khud chal ke aaoge.", "en": "I'll call three times. Answer the third… and you'll walk to the water yourself.", "who": "meera"}, {"t": 8.7, "d": 2.9, "hi": "Dida ki kahaani… Nishi. Yeh sach hai?", "en": "Dida's story… the Nishi. It's real?", "who": "lead"}]}, "S2_A": {"dur": 12.25, "subs": [{"t": 3.7, "d": 5.7, "hi": "Teen baar bulaungi. Teesri baar jawab diya… toh paani tak khud chal ke aaoge.", "en": "I'll call three times. Answer the third… and you'll walk to the water yourself.", "who": "meera"}, {"t": 8.7, "d": 3.7, "hi": "Koi prank hai yeh. Koi mujhe dara raha hai.", "en": "This is a prank. Someone's trying to scare me.", "who": "lead"}]}, "S2_D": {"dur": 12.25, "subs": [{"t": 3.7, "d": 5.7, "hi": "Teen baar bulaungi. Teesri baar jawab diya… toh paani tak khud chal ke aaoge.", "en": "I'll call three times. Answer the third… and you'll walk to the water yourself.", "who": "meera"}, {"t": 8.7, "d": 3.2, "hi": "Nishi. Bela-di ke baad… phir se.", "en": "The Nishi. After Bela-di… again.", "who": "lead"}]}, "F2_PHONE": {"dur": 6.625, "subs": []}, "F2_PHOTO": {"dur": 6.625, "subs": []}, "F2_PAYAL": {"dur": 6.625, "subs": []}, "S3_T": {"dur": 11.833, "subs": [{"t": 3.0, "d": 8.9, "hi": "Main hoon. Sach mein main. Jo paani mein hai, woh main nahi hoon… aur jo tere peeche khada hai, uspe bharosa mat karna.", "en": "It's me. Really me. What's in the water isn't me… and don't trust whoever is standing behind you.", "who": "meera"}]}, "S3_A": {"dur": 11.833, "subs": [{"t": 3.0, "d": 8.9, "hi": "Main hoon. Sach mein main. Jo paani mein hai, woh main nahi hoon… aur jo tere peeche khada hai, uspe bharosa mat karna.", "en": "It's me. Really me. What's in the water isn't me… and don't trust whoever is standing behind you.", "who": "meera"}]}, "S3_D": {"dur": 11.833, "subs": [{"t": 3.0, "d": 8.9, "hi": "Main hoon. Sach mein main. Jo paani mein hai, woh main nahi hoon… aur jo tere peeche khada hai, uspe bharosa mat karna.", "en": "It's me. Really me. What's in the water isn't me… and don't trust whoever is standing behind you.", "who": "meera"}]}, "F3_T_MEERA": {"dur": 7.833, "subs": [{"t": 4.6, "d": 2.25, "hi": "Tune phir se phone nahi uthaya.", "en": "You didn't pick up again.", "who": "meera"}]}, "F3_T_AJAY": {"dur": 7.833, "subs": [{"t": 4.6, "d": 3.3, "hi": "Sorry yaar… record karna padega.", "en": "Sorry, man… I have to record this.", "who": "lead"}]}, "F3_T_DIDA": {"dur": 0, "subs": [{"t": 4.6, "d": 1.9, "hi": "Chal na. Paani garam hai.", "en": "Come on. The water's warm.", "who": "meera"}]}, "F3_A_MEERA": {"dur": 7.833, "subs": [{"t": 4.6, "d": 2.25, "hi": "Tune phir se phone nahi uthaya.", "en": "You didn't pick up again.", "who": "meera"}]}, "F3_A_TARA": {"dur": 7.833, "subs": [{"t": 4.6, "d": 1.7, "hi": "Woh mujhe yahan le aayi…", "en": "She brought me here…", "who": "lead"}]}, "F3_A_DIDA": {"dur": 7.833, "subs": [{"t": 4.6, "d": 1.9, "hi": "Chal na. Paani garam hai.", "en": "Come on. The water's warm.", "who": "meera"}]}, "F3_D_MEERA": {"dur": 7.833, "subs": [{"t": 4.6, "d": 2.25, "hi": "Tune phir se phone nahi uthaya.", "en": "You didn't pick up again.", "who": "meera"}]}, "F3_D_TARA": {"dur": 7.833, "subs": [{"t": 4.6, "d": 1.7, "hi": "Woh mujhe yahan le aayi…", "en": "She brought me here…", "who": "lead"}]}, "F3_D_AJAY": {"dur": 7.833, "subs": [{"t": 4.6, "d": 3.3, "hi": "Sorry yaar… record karna padega.", "en": "Sorry, man… I have to record this.", "who": "lead"}]}, "O_MEERA": {"dur": 5.042, "subs": []}, "O_TARA": {"dur": 5.042, "subs": []}, "O_AJAY": {"dur": 5.042, "subs": []}, "O_DIDA": {"dur": 5.042, "subs": []}, "S4": {"dur": 18.625, "subs": [{"t": 0.8, "d": 4.85, "hi": "Main tha wahan. 3:44 pe. Record karta raha… phir bhaag gaya.", "en": "I was there. At 3:44. I kept recording… then I ran.", "who": "lead"}, {"t": 5.6, "d": 3.35, "hi": "Aur maine uska call mute kiya. Thak gayi thi uski kahaniyon se.", "en": "And I muted her call. I was tired of her stories.", "who": "lead"}, {"t": 8.9, "d": 5.6, "hi": "Teen hafte pehle woh mere paas aayi thi. Boli koi bulata hai. Maine usse ghar bhej diya.", "en": "Three weeks ago she came to me. Said someone kept calling her. I sent her home.", "who": "lead"}, {"t": 14.3, "d": 4.3, "hi": "Tum teeno ne mujhe chhoda. Ek mere saath aayega.", "en": "The three of you left me. One of you comes with me.", "who": "meera"}]}, "F4_T": {"dur": 8.042, "subs": [{"t": 4.5, "d": 2.8, "hi": "Sorry, Meera. Maine phone nahi uthaya.", "en": "Sorry, Meera. I didn't pick up.", "who": "lead"}]}, "F4_A": {"dur": 8.042, "subs": [{"t": 4.5, "d": 2.15, "hi": "Mujhe le ja. Galti meri thi.", "en": "Take me. It was my fault.", "who": "lead"}]}, "F4_D": {"dur": 8.042, "subs": [{"t": 4.5, "d": 3.62, "hi": "Bela-di ko nahi bacha payi. Isse bachaungi.", "en": "I couldn't save Bela-di. I'll save this one.", "who": "lead"}]}, "S5_T": {"dur": 11.25, "subs": [{"t": 2.4, "d": 2.35, "hi": "Utha le. Ya mujhe kuch de.", "en": "Pick up. Or give me something.", "who": "meera"}, {"t": 7.6, "d": 2.52, "hi": "Iss baar main sunungi, Meera.", "en": "This time I'll listen, Meera.", "who": "lead"}]}, "S5_A": {"dur": 11.25, "subs": [{"t": 2.4, "d": 2.35, "hi": "Utha le. Ya mujhe kuch de.", "en": "Pick up. Or give me something.", "who": "meera"}, {"t": 7.6, "d": 3.1, "hi": "Iss baar main bhaagunga nahi.", "en": "This time I won't run.", "who": "lead"}]}, "S5_D": {"dur": 11.25, "subs": [{"t": 2.4, "d": 2.35, "hi": "Utha le. Ya mujhe kuch de.", "en": "Pick up. Or give me something.", "who": "meera"}, {"t": 7.6, "d": 3.3, "hi": "Iss baar main ghar nahi bhejungi.", "en": "This time I won't send you home.", "who": "lead"}]}, "F5_PHONE": {"dur": 7.458, "subs": []}, "F5_CONF": {"dur": 7.458, "subs": []}, "F5_THREAD": {"dur": 7.458, "subs": []}, "FREED_T": {"dur": 8.833, "subs": [{"t": 2.8, "d": 3.1, "hi": "Thank you, Tara. Iss baar sun liya.", "en": "Thank you, Tara. This time you listened.", "who": "meera"}]}, "FREED_A": {"dur": 8.833, "subs": [{"t": 2.8, "d": 2.8, "hi": "Thank you, Ajay. Iss baar ruk gaye.", "en": "Thank you, Ajay. This time you stayed.", "who": "meera"}]}, "FREED_D": {"dur": 8.833, "subs": [{"t": 2.8, "d": 3.25, "hi": "Thank you, Dida. Iss baar ghar nahi bheja.", "en": "Thank you, Dida. This time you didn't send me home.", "who": "meera"}]}, "TRUTH_T": {"dur": 8.542, "subs": [{"t": 1.2, "d": 3.35, "hi": "Aur maine uska call mute kiya. Thak gayi thi uski kahaniyon se.", "en": "And I muted her call. I was tired of her stories.", "who": "lead"}]}, "TRUTH_A": {"dur": 8.542, "subs": [{"t": 1.2, "d": 4.85, "hi": "Main tha wahan. 3:44 pe. Record karta raha… phir bhaag gaya.", "en": "I was there. At 3:44. I kept recording… then I ran.", "who": "lead"}]}, "TRUTH_D": {"dur": 8.542, "subs": [{"t": 1.2, "d": 5.6, "hi": "Teen hafte pehle woh mere paas aayi thi. Boli koi bulata hai. Maine usse ghar bhej diya.", "en": "Three weeks ago she came to me. Said someone kept calling her. I sent her home.", "who": "lead"}]}, "VOICE_TL": {"dur": 9.042, "subs": [{"t": 5.4, "d": 2.2, "hi": "Ajay… darwaza khol na.", "en": "Ajay… open the door.", "who": "lead"}]}, "VOICE_AL": {"dur": 9.042, "subs": [{"t": 5.4, "d": 1.84, "hi": "Tara… darwaza khol na.", "en": "Tara… open the door.", "who": "lead"}]}, "VOICE_DL": {"dur": 9.042, "subs": [{"t": 5.4, "d": 2.3, "hi": "Tara… darwaza khol na.", "en": "Tara… open the door.", "who": "lead"}]}};
+const $=s=>document.querySelector(s);
+const vA=$('#vA'),vB=$('#vB');let cur=vA,nxt=vB;
+const st={l1:null,obj:null,fig:null,l2:null,gift:null};
+const NAME={T:'Tara',A:'Ajay',D:'Dida',MEERA:'Meera',TARA:'Tara',AJAY:'Ajay',DIDA:'Dida'};
+const FL={
+ 1:{k:'Flick 1 · Who leads',q:'Who does Meera call first?',opts:()=>[['T','Tara'],['A','Ajay'],['D','Dida']],thumb:o=>'F1_'+o,set:o=>st.l1=o},
+ 2:{k:'Flick 2',q:'What rises from the tank?',opts:()=>[['PHONE',"Meera's phone"],['PHOTO',"Bela's photo"],['PAYAL',"Meera's payal"]],thumb:o=>'F2_'+o,set:o=>st.obj=o},
+ 3:{k:'Flick 3',q:'Who is standing behind you?',opts:()=>{const all=[['MEERA','Meera'],['TARA','Tara'],['AJAY','Ajay'],['DIDA','Dida']];const me={T:'TARA',A:'AJAY',D:'DIDA'}[st.l1];return all.filter(x=>x[0]!==me)},thumb:o=>'F3_'+st.l1+'_'+o,set:o=>st.fig=o},
+ 4:{k:'Flick 4 · Final lead',q:'Who walks into the water?',opts:()=>[['T','Tara'],['A','Ajay'],['D','Dida']],thumb:o=>'F4_'+o,set:o=>st.l2=o},
+ 5:{k:'Flick 5',q:'What do you give the river?',opts:()=>[['PHONE',"Meera's phone"],['CONF','My confession'],['THREAD','The thread']],thumb:o=>'F5_'+o,set:o=>st.gift=o}
+};
+const ENDCARD={PHONE:['The Freed Soul','Kuch calls uthaane padte hain.','Some calls have to be answered.'],CONF:['The Truth, Posted','Sach bhi viral hota hai.','The truth goes viral too.'],THREAD:['The Voice','Ab uske paas teri awaaz hai.','Now it has your voice.']};
+function steps(){return[
+ {clip:'E1S1',title:['Episode 1','NISHI','The Second Call']},{flick:1},
+ {clip:()=>'F1_'+st.l1},{clip:()=>'S2_'+st.l1},{flick:2},
+ {clip:()=>'F2_'+st.obj},{clip:()=>'S3_'+st.l1},{flick:3},
+ {clip:()=>'F3_'+st.l1+'_'+st.fig},{ep1end:1},
+ {clip:()=>'O_'+st.fig,title:['Episode 2','NISHI','The Third Call']},{clip:'S4'},{flick:4},
+ {clip:()=>'F4_'+st.l2},{clip:()=>'S5_'+st.l2},{flick:5},
+ {clip:()=>'F5_'+st.gift},{clip:()=>endingKey()},{end:1}]}
+function endingKey(){const L=st.l2;if(st.gift==='PHONE')return 'FREED_'+L;if(st.gift==='CONF')return 'TRUTH_'+L;return 'VOICE_'+L+'L'}
+let SEQ=steps(),idx=-1,holdTimer=null,holding=false,paused=false,started=false;
+const keyOf=s=>typeof s.clip==='function'?s.clip():s.clip;
+const url=k=>'media/'+k+'.mp4';
+// overlays per clip
+function CARDS(k){const c=[];const L=k.slice(-1);
+ const call=(who,n,t0,t1)=>c.push({t0,t1,h:`<div class="av g">${who[0]}</div><div><div class="t1">${who} calling…</div><div class="t2">${n}</div></div><div class="pulse"></div>`});
+ if(k==='E1S1'){c.push({t0:5.6,t1:8.1,h:`<div class="av">M</div><div><div class="t1">Meera</div><div class="t2">online · typing…</div></div>`});c.push({t0:6.6,t1:8.1,h:`<div class="av">M</div><div style="flex:1"><div class="t1">Voice note · 0:04</div><div class="wave">${'<i></i>'.repeat(14)}</div></div>`})}
+ if(k.startsWith('F1_'))c.push({t0:1.6,t1:5.2,h:`<div class="av">M</div><div style="flex:1"><div class="t1">Meera · voice note</div><div class="wave">${'<i></i>'.repeat(14)}</div></div>`});
+ if(k==='F2_PHONE')c.push({t0:4.4,t1:6.6,h:`<div class="av r">!</div><div><div class="t1">Recent call · Ajay · 14 min</div><div class="t2">3:41 AM — the night she died</div></div>`});
+ if(k==='F2_PHOTO')c.push({t0:4.4,t1:6.6,h:`<div class="av">B</div><div><div class="t1">On the back, in faded ink</div><div class="t2">Bela, 1968</div></div>`});
+ if(k==='F2_PAYAL')c.push({t0:4.6,t1:6.6,h:`<div class="av">♪</div><div><div class="t1">It chimes once</div><div class="t2">though nothing moved it</div></div>`});
+ if(k.startsWith('S3_')){c.push({t0:0.2,t1:2.8,h:`<div class="av">M</div><div><div class="t1">Meera shared Live Location</div><div class="t2">Prinsep Ghat · 4:44 AM</div></div>`});call('Meera','Call 2 of 3 · she never picks… you do',3.0,10.5)}
+ if(k.startsWith('S5_'))call('Meera','Call 3 of 3',6.0,11);
+ if(k.startsWith('TRUTH_')){const m={T:["Posted to meera.das's story","Tara's confession · 2M views by noon"],A:['3:44 AM video + confession','Posted together · not deleted'],D:["Playing at Meera's shraddh",'From every phone in the hall']}[L];c.push({t0:1.0,t1:8.4,h:`<div class="av r">●</div><div><div class="t1">${m[0]}</div><div class="t2">${m[1]}</div></div>`})}
+ if(k==='VOICE_TL')call('Tara','Tara is asleep in the next room',3.2,9);
+ if(k==='VOICE_AL')call('Ajay','Ajay is asleep on the divan',3.2,9);
+ if(k==='VOICE_DL')call('Dida','From the puja room, where Dida sits silent',3.2,9);
+ if(k==='FREED_T')c.push({t0:6.2,t1:8.8,h:`<div class="av">M</div><div><div class="t1">Meera</div><div class="t2">last seen 13 days ago</div></div>`});
+ return c}
+let rafId=0;
+function tick(){const k=cur.dataset.k;const t=cur.currentTime;if(k){
+ const cs=CARDS(k).filter(c=>t>=c.t0&&t<c.t1);const box=$('#cards');const sig=cs.map(c=>c.h).join('|');if(box.dataset.sig!==sig){box.dataset.sig=sig;box.innerHTML=cs.map(c=>`<div class="card">${c.h}</div>`).join('')}
+ const sub=(CLIPS[k]||{subs:[]}).subs.find(s=>t>=s.t&&t<s.t+s.d);const el=$('#subs');
+ if(sub&&!holding){el.hidden=false;el.className=sub.who==='meera'?'meera':'';el.querySelector('.hi').textContent=sub.hi;el.querySelector('.en').textContent=sub.en}else el.hidden=true}
+ rafId=requestAnimationFrame(tick)}
+// audio bed
+let AC,bedGain,bedSrc,bedBuf;
+async function initAudio(){try{AC=new (window.AudioContext||window.webkitAudioContext)();bedGain=AC.createGain();bedGain.gain.value=0;bedGain.connect(AC.destination);const r=await fetch('media/drone.mp3');bedBuf=await AC.decodeAudioData(await r.arrayBuffer());bedSrc=AC.createBufferSource();bedSrc.buffer=bedBuf;bedSrc.loop=true;bedSrc.connect(bedGain);bedSrc.start();bed(0.16,2)}catch(e){}}
+function bed(v,s){if(!AC)return;const g=bedGain.gain;g.cancelScheduledValues(AC.currentTime);g.setValueAtTime(g.value,AC.currentTime);g.linearRampToValueAtTime(muted?0:v,AC.currentTime+s)}
+let stingBuf;async function sting(){if(!AC||muted)return;try{if(!stingBuf){const r=await fetch('media/stinger.mp3');stingBuf=await AC.decodeAudioData(await r.arrayBuffer())}const s=AC.createBufferSource();s.buffer=stingBuf;const g=AC.createGain();g.gain.value=.5;s.connect(g).connect(AC.destination);s.start()}catch(e){}}
+let muted=false;
+// playback
+function prepare(k){if(!k)return;if(nxt.dataset.k===k)return;nxt.dataset.k=k;nxt.src=url(k);nxt.load()}
+function playKey(k,after){const el=(nxt.dataset.k===k)?nxt:nxt;if(el.dataset.k!==k){el.dataset.k=k;el.src=url(k);el.load()}
+ el.muted=muted;el.currentTime=0;const go=()=>{el.classList.add('on');el.classList.remove('hold');cur.classList.remove('on','hold');const old=cur;cur=el;nxt=old;setTimeout(()=>{try{old.pause()}catch(e){}},150);after&&after()};
+ el.onplaying=()=>{el.onplaying=null;go()};el.onended=onEnded;const p=el.play();if(p)p.catch(()=>{});}
+function onEnded(){if(this!==cur)return;advance()}
+function peekNextKey(){const s=SEQ[idx+1];if(s&&s.clip)return keyOf(s);return null}
+function advance(){idx++;const s=SEQ[idx];if(!s)return;
+ if(s.clip){const k=keyOf(s);playKey(k,()=>{if(s.title)showTitle(s.title);bed(s.clip==='E1S1'||/^O_/.test(k)?0.14:0.09,1.5);const n=peekNextKey();if(n)setTimeout(()=>prepare(n),600)})}
+ else if(s.flick)showFlick(s.flick);
+ else if(s.ep1end)ep1End();else if(s.end)finalEnd()}
+function showTitle(t){const d=document.createElement('div');d.id='title';d.innerHTML=`<div class="e">${t[0]}</div><div class="n">${t[1]}</div><div class="s">${t[2]}</div>`;$('#frame').appendChild(d);setTimeout(()=>d.remove(),3500)}
+function showFlick(n){const F=FL[n];holding=true;$('#subs').hidden=true;cur.classList.add('hold');bed(0.3,1.2);sting();
+ $('#q .k').textContent=F.k;$('#q h2').textContent=F.q;const rail=$('#rail');rail.innerHTML='';const opts=F.opts();
+ opts.forEach(([o,label],i)=>{const b=document.createElement('button');b.className='opt'+(i===0?' sel':'');b.innerHTML=`<img src="thumbs/${F.thumb(o)}.jpg" alt=""><span>${label}</span>`;b.setAttribute('aria-label',label);b.onclick=e=>{e.stopPropagation();choose(n,o)};b.onmouseenter=()=>{rail.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};rail.appendChild(b)});
+ $('#hold').hidden=false;
+ // preload first option
+ const s=SEQ[idx+1];F.set(opts[0][0]);prepare(keyOf(s));F.set(null);
+ const bar=$('#timer i');bar.style.transition='none';bar.style.transform='scaleX(1)';void bar.offsetWidth;bar.style.transition='transform 12s linear';bar.style.transform='scaleX(0)';
+ clearTimeout(holdTimer);holdTimer=setTimeout(()=>{const sel=[...rail.querySelectorAll('.opt')].findIndex(x=>x.classList.contains('sel'));choose(n,opts[Math.max(0,sel)][0])},12000)}
+function choose(n,o){if(!holding)return;clearTimeout(holdTimer);holding=false;FL[n].set(o);$('#hold').hidden=true;bed(0.09,1);advance()}
+function ep1End(){const c=$('#card');c.hidden=false;c.innerHTML=`<div class="eyebrow">End of Episode 1</div><p class="quote" style="margin-top:14px">“Teen baar bulati hai. Do baar tum sun chuke ho.”<small>It calls three times. You've heard two.</small></p><button class="btn" id="bEp2"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>Episode 2</button>`;cur.classList.remove('on');bed(0.2,1.5);
+ const go=()=>{clearTimeout(t);c.hidden=true;advance()};const t=setTimeout(go,9000);$('#bEp2').onclick=e=>{e.stopPropagation();go()};const n=peekNextKey();if(n)prepare(n)}
+function finalEnd(){const e=ENDCARD[st.gift];const c=$('#card');c.hidden=false;cur.classList.remove('on');bed(0.22,2);
+ c.innerHTML=`<div class="eyebrow">Ending · ${e[0]}</div><p class="quote" style="margin-top:14px">“${e[1]}”<small>${e[2]}</small></p><div class="recap">Your night: <b>${NAME[st.l1]}</b> answered first · the tank gave <b>${({PHONE:"Meera's phone",PHOTO:"Bela's photo",PAYAL:"the payal"})[st.obj]}</b> · <b>${NAME[st.fig]}</b> stood behind · <b>${NAME[st.l2]}</b> walked in · gave <b>${({PHONE:"Meera's phone",CONF:'a confession',THREAD:'the thread'})[st.gift]}</b></div><div style="display:flex;gap:10px;justify-content:center"><button class="btn" id="bAgain">Watch again</button><button class="btn ghost" id="bHome">Close</button></div>`;
+ $('#bAgain').onclick=e=>{e.stopPropagation();restart(true)};$('#bHome').onclick=e=>{e.stopPropagation();closeAll()}}
+function restart(play){Object.keys(st).forEach(k=>st[k]=null);SEQ=steps();idx=-1;$('#card').hidden=true;$('#hold').hidden=true;holding=false;clearTimeout(holdTimer);[vA,vB].forEach(v=>{v.pause();v.classList.remove('on','hold');v.removeAttribute('src');v.dataset.k='';v.load()});if(play)advance()}
+function closeAll(){restart(false);$('#cover').hidden=false;$('#ctl').hidden=true;bed(0,0.8);if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})}
+$('#bStart').onclick=async e=>{e.stopPropagation();$('#cover').hidden=true;$('#ctl').hidden=false;if(!AC)await initAudio();else{AC.resume();bed(0.14,1.5)}
+ [vA,vB].forEach(v=>{v.muted=true;const p=v.play();if(p)p.catch(()=>{});v.pause();v.muted=muted});
+ if(!started){started=true;requestAnimationFrame(tick)}restart(true)};
+$('#tap').onclick=()=>{if(holding||!$('#card').hidden)return;if(cur.paused){cur.play();paused=false;$('#pauseInd').hidden=true;AC&&AC.resume()}else{cur.pause();paused=true;$('#pauseInd').hidden=false;AC&&AC.suspend()}};
+$('#bMute').onclick=e=>{e.stopPropagation();muted=!muted;[vA,vB].forEach(v=>v.muted=muted);$('#mw').style.display=muted?'none':'';bed(muted?0:(holding?0.3:0.09),0.3);$('#bMute').setAttribute('aria-label',muted?'Unmute':'Mute')};
+$('#bFs').onclick=e=>{e.stopPropagation();const el=document.documentElement;if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else (el.requestFullscreen?el.requestFullscreen():el.webkitRequestFullscreen?el.webkitRequestFullscreen():null)};
+$('#bClose').onclick=e=>{e.stopPropagation();closeAll()};
+document.addEventListener('keydown',e=>{if(e.key===' '&&!holding){e.preventDefault();$('#tap').click()}});
+</script>
+</body>
+</html>
