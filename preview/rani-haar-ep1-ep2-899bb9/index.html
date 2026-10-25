@@ -1,0 +1,232 @@
+<meta charset="utf-8">
+<title>Rani Haar</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ink:#0d0a0b; --surface:#191314; --line:#2e2426; --text:#f6efe9; --muted:#a3958f; --signal:#d8343a; --gold:#f2b544;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif; --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 28px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:start}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr);justify-items:center;gap:24px}.col{order:-1}.info{padding-top:0}}
+.info{display:grid;gap:18px;align-content:start;padding-top:8px;max-width:460px;min-width:0}
+.eyebrow{font:600 12px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-stretch:68%;font-weight:900;font-size:clamp(54px,9vw,92px);line-height:.86;margin:6px 0 0}
+h1 span{display:block;height:8px;width:58%;background:var(--gold);margin-top:12px}
+.logline{color:#d7ccc6;font-size:15px;line-height:1.55;margin:0}
+.note{font-size:13px;line-height:1.5;color:var(--muted);border-left:3px solid var(--signal);padding-left:12px;margin:0}
+.eps{display:flex;gap:8px}
+.ep{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--text);font:600 14px/1 var(--body);padding:11px 16px;border-radius:999px;cursor:pointer}
+.ep[aria-pressed="true"]{background:var(--text);color:var(--ink);border-color:var(--text)}
+.howto{display:grid;gap:9px;margin:0;padding:0;list-style:none}
+.howto li{display:grid;grid-template-columns:58px minmax(0,1fr);gap:12px;align-items:baseline;font-size:14px;line-height:1.45;color:#e2d8d2}
+.howto b{font:500 12px/1 var(--mono);color:var(--muted)}
+.path{border-top:1px solid var(--line);padding-top:14px;display:grid;gap:9px}
+.path .row{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.path .row span:first-child{color:var(--muted)}.path .row span:last-child{font-weight:600;text-align:right}
+.path .row.end span:last-child{color:var(--gold)}
+.jump{display:flex;flex-wrap:wrap;gap:8px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--text);font:500 13px/1 var(--body);padding:9px 12px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:#54443f}.chip .tc{font-family:var(--mono);color:var(--muted);margin-left:6px}
+.chip:focus-visible,.ic:focus-visible,.ep:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.col{display:grid;gap:12px;justify-items:center;width:100%}
+.stage{width:min(100%,410px,calc((100svh - 150px) * 9 / 16))}
+.controls{display:flex;gap:8px;align-items:center;width:min(100%,410px);justify-content:space-between}
+.controls .grp{display:flex;gap:8px}
+.ic{appearance:none;height:40px;min-width:40px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--text);font:600 13px/1 var(--body);cursor:pointer}
+.time{font:500 13px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.fp{position:relative;aspect-ratio:9/16;max-width:100%;overflow:hidden;background:#000;container-type:inline-size;border-radius:26px;box-shadow:0 0 0 1px #33282a,0 30px 80px -20px rgba(0,0,0,.8)}
+.fp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.fp .fp-ov{opacity:0}.fp .fp-ov.on{opacity:1}
+.fp-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:5}.fp-flash.go{animation:fpflash .3s ease-out}
+@keyframes fpflash{0%{opacity:.3}100%{opacity:0}}
+.fp-bar{position:absolute;left:12px;right:12px;bottom:9px;height:3px;border-radius:2px;background:rgba(255,255,255,.22);z-index:9;cursor:pointer}
+.fp-bar::before{content:"";position:absolute;inset:-8px 0}
+.fp-bar i{position:absolute;inset:0 auto 0 0;background:#fff;border-radius:2px;width:0}
+.fp-bar em{position:absolute;top:-2px;height:7px;background:var(--signal);border-radius:2px}
+.fp-bar b{position:absolute;top:-5px;width:3px;height:13px;background:var(--gold);border-radius:2px;transform:translateX(-1px)}
+.fp-start{position:absolute;inset:0;z-index:20;display:grid;place-items:end center;padding-bottom:18%;background:center/cover no-repeat #000}
+.fp-start::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 30%,rgba(0,0,0,.7))}
+.fp-start button{position:relative;z-index:1;border:0;cursor:pointer;background:var(--signal);color:#fff;font:700 14px/1 system-ui,sans-serif;padding:14px 20px;border-radius:99px}
+/* switcher: question at the top-left, three thumbnails stacked on the right edge, lower-middle */
+.fp-q{position:absolute;z-index:8;left:3.5cqw;right:26cqw;top:22cqw;display:grid;gap:1.6cqw;justify-items:start;opacity:0;transform:translateY(-2cqw);transition:opacity .25s,transform .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.fp-q.show{opacity:1;transform:none}
+.fp-q span{display:inline-flex;align-items:center;gap:1.4cqw;font:700 2.6cqw/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;background:var(--signal);color:#fff;padding:1.5cqw 2.4cqw;border-radius:99px;white-space:nowrap}
+.fp-q span::before{content:"";width:1.6cqw;height:1.6cqw;border-radius:50%;background:#fff;animation:fpdot 1.2s ease-in-out infinite}
+@keyframes fpdot{50%{opacity:.25}}
+.fp-q strong{font:800 5.8cqw/1.1 system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff;text-shadow:0 .4cqw 2.4cqw rgba(0,0,0,.8);text-wrap:balance}
+.fp-q em{font:600 3.3cqw/1.3 system-ui,sans-serif;font-style:normal;color:var(--gold);text-shadow:0 .3cqw 1.6cqw rgba(0,0,0,.8)}
+.fp-q em:empty{display:none}
+.fp-rail{position:absolute;z-index:8;right:3cqw;top:44%;display:grid;gap:2.4cqw;width:19cqw;transform:translateX(130%);transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.fp-rail.show{transform:none}
+.fp-thumb{appearance:none;padding:0;border:0;cursor:pointer;border-radius:3.2cqw;overflow:hidden;background:#222;aspect-ratio:1/1;position:relative;box-shadow:0 0 0 .5cqw rgba(255,255,255,.35),0 2cqw 4cqw -1cqw rgba(0,0,0,.7);transition:transform .15s,box-shadow .15s}
+.fp-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.fp-thumb span{position:absolute;left:0;right:0;bottom:0;padding:4cqw 1.4cqw 1.4cqw;font:700 2.3cqw/1.12 system-ui,sans-serif;color:#fff;text-align:left;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85))}
+.fp-thumb.sel{box-shadow:0 0 0 .8cqw #fff,0 0 0 1.6cqw var(--signal);transform:translateX(-1.6cqw)}
+.fp-thumb:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.fp-timer{height:.9cqw;border-radius:1cqw;background:rgba(255,255,255,.25);overflow:hidden}.fp-timer i{display:block;height:100%;background:#fff;transform-origin:left}
+.fp-toast{position:absolute;z-index:30;left:50%;top:40%;transform:translate(-50%,-50%);background:rgba(20,16,17,.92);color:#fff;font:500 3.4cqw/1.4 system-ui,sans-serif;padding:3cqw 4cqw;border-radius:3cqw;width:74%;text-align:center;opacity:0;transition:opacity .2s;pointer-events:none}.fp-toast.show{opacity:1}
+.fp-endcard{position:absolute;inset:0;z-index:15;display:grid;place-items:center;background:rgba(8,6,6,.86);backdrop-filter:blur(6px);padding:8cqw;color:#fff;text-align:center}
+.fp-ec-in{display:grid;gap:3cqw;justify-items:center}
+.fp-endcard small{font:600 2.8cqw/1.3 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.fp-endcard h3{margin:0;font:800 8cqw/1.05 system-ui,sans-serif}
+.fp-endcard p{margin:0;font:400 3.6cqw/1.45 system-ui,sans-serif;color:#ddd3cd}
+.fp-ec-btns{display:flex;gap:2.4cqw;flex-wrap:wrap;justify-content:center;margin-top:2cqw}
+.fp-ec-btns button{appearance:none;border:0;cursor:pointer;font:700 3.4cqw/1 system-ui,sans-serif;padding:3cqw 4.4cqw;border-radius:99px;background:#fff;color:#111}
+.fp-ec-btns button.pri{background:var(--signal);color:#fff}
+.fp-ec-map{display:grid;gap:1.4cqw;margin-top:3cqw;font:500 3cqw/1.3 system-ui,sans-serif;color:#a99d97}
+.fp-ec-map span.on{color:#fff;font-weight:700}
+.fp-sub{position:absolute;z-index:9;left:7%;right:7%;bottom:16%;text-align:center;pointer-events:none;font:700 4.3cqw/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff;text-shadow:0 0 .5cqw #000,0 0 .5cqw #000,0 .3cqw 1.2cqw rgba(0,0,0,.9);text-wrap:balance}
+.fp-sub:empty{display:none}
+.ic[aria-pressed="true"]{background:var(--text);color:var(--ink)}
+#cc{white-space:nowrap}
+</style>
+<div class="wrap">
+  <section class="info" aria-label="About Rani Haar">
+    <div><div class="eyebrow">Flam Flicks · Microdrama · Episodes 1–2</div><h1>RANI HAAR<span></span></h1></div>
+    <p class="logline">Shaadi kal hai. Haar aaj gayab hai. The night before Meera's wedding in Lucknow, Dadi's heirloom necklace is missing from its box. You decide who Meera accuses and who tells the truth at the mandap.</p>
+    <p class="note">Both episodes are finished cuts: picture, dialogue, score and SFX. Your Flick picks in Episode 1 carry into Episode 2. Turn subtitles on or off with the Subtitles button (or press C).</p>
+    <div class="eps" role="group" aria-label="Episode"><button class="ep" data-ep="0" aria-pressed="true" type="button">Episode 1 · Khaali Dibba</button><button class="ep" data-ep="1" aria-pressed="false" type="button">Episode 2 · Girvi</button></div>
+    <ul class="howto" id="howto"></ul>
+    <div class="path" aria-live="polite" id="path"></div>
+    <div class="jump" id="jump"></div>
+  </section>
+  <div class="col">
+    <div class="fp stage" id="stage"></div>
+    <div class="controls">
+      <div class="grp"><button class="ic" id="pp" type="button">Play</button><button class="ic" id="mute" type="button">Mute</button><button class="ic" id="restart" type="button">Restart</button><button class="ic" id="cc" type="button" aria-pressed="true" aria-label="Subtitles">Subtitles: On</button></div>
+      <span class="time" id="time">0:00 / 1:02</span>
+    </div>
+  </div>
+</div>
+<script>
+/* Flicks engine (BLOCKED / Blank Cheque model): main video keeps playing; each flick window shows
+   frame-synced variant videos; tapping a thumbnail swaps the picture (and its dialogue) on the same frame.
+   Choices are shared across episodes and drive linked scenes and the ending. */
+function FlicksPlayer(root, cfg, choice, hooks){
+  hooks=hooks||{}; const DUR=cfg.duration, FL=cfg.flicks||[], LK=cfg.linked||[], EN=cfg.endings||null, ALLF=hooks.allFlicks||FL;
+  const BR=EN?EN.t0:DUR; FL.forEach(f=>{ if(!choice[f.id]) choice[f.id]='A'; });
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  root.innerHTML=`<video class="fp-main" src="${esc(cfg.main)}" playsinline preload="auto"></video><div class="fp-flash"></div>
+   <div class="fp-q" aria-live="polite"><span>Flick</span><strong></strong><em></em></div>
+   <div class="fp-rail" role="group" aria-label="Choose a version"><div class="fp-thumbs" style="display:grid;gap:2.4cqw"></div><div class="fp-timer"><i></i></div></div>
+   <div class="fp-sub" aria-live="off"></div><div class="fp-bar"><i></i></div><div class="fp-toast"></div>
+   <div class="fp-endcard" hidden><div class="fp-ec-in"><small></small><h3></h3><p></p><div class="fp-ec-btns"></div><div class="fp-ec-map"></div></div></div>
+   <div class="fp-start" style="background-image:url('${esc(cfg.poster||'')}')"><button type="button">${esc(cfg.startLabel||'Play')}</button></div>`;
+  const q=s=>root.querySelector(s), main=q('.fp-main'), rail=q('.fp-rail'), qq=q('.fp-q'), th=q('.fp-thumbs');
+  const mk=(src,audio)=>{ const el=document.createElement('video'); el.src=src; el.muted=true; el.playsInline=true; el.preload='auto'; el.className='fp-ov'; el.dataset.audio=audio?'1':''; root.insertBefore(el,q('.fp-flash')); return el; };
+  const ovs={}; FL.forEach(f=>f.v.forEach(v=>{ if(v.video) ovs[f.id+v.id]=mk(v.video,f.audio); }));
+  const lks=LK.map(l=>({...l, els:Object.fromEntries(Object.entries(l.v).map(([k,u])=>[k,mk(u,l.audio)]))}));
+  const ends={}; if(EN) Object.entries(EN.v).forEach(([k,e])=>{ const el=mk(e.video,true); el.classList.add('fp-end'); ends[k]=el; el.addEventListener('ended',()=>showEnd(k)); });
+  let phase='main', curEnd=null, active=null, raf=0, tt, muted=!!hooks.muted, started=false;
+  FL.forEach(f=>{ const m=document.createElement('em'); m.style.left=(f.t0/DUR*100)+'%'; m.style.width=((f.t1-f.t0)/DUR*100)+'%'; q('.fp-bar').appendChild(m); });
+  if(EN){ const m=document.createElement('b'); m.style.left=(BR/DUR*100)+'%'; q('.fp-bar').appendChild(m); }
+  const media=()=>phase==='end'&&curEnd?ends[curEnd]:main;
+  const now=()=>phase==='end'&&curEnd?BR+ends[curEnd].currentTime:main.currentTime;
+  const emit=()=>{ hooks.state&&hooks.state(!media().paused, muted); };
+  const path=()=>hooks.path&&hooks.path(choice);
+  const toast=m=>{ const t=q('.fp-toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2400); };
+  function syncEl(el,target,force){ if(force||Math.abs(el.currentTime-target)>0.12) el.currentTime=Math.max(0,target); if(main.paused){ if(!el.paused) el.pause(); } else if(el.paused) el.play().catch(()=>{}); const show=()=>el.classList.add('on'); el.readyState>=2?show():el.addEventListener('loadeddata',show,{once:true}); }
+  function sync(force){
+    const t=main.currentTime, want=new Set(); let aud=null;
+    if(phase==='main'){
+      if(active&&choice[active.id]!=='A'){ const el=ovs[active.id+choice[active.id]]; if(el){ want.add(el); syncEl(el,t-active.t0,force); if(el.dataset.audio) aud=el; } }
+      lks.forEach(l=>{ if(t>=l.t0-0.02&&t<l.t1){ const el=l.els[choice[l.flick]||'A']; if(el){ want.add(el); syncEl(el,t-l.t0,force); if(el.dataset.audio) aud=el; } } });
+    }
+    root.querySelectorAll('.fp-ov:not(.fp-end)').forEach(o=>{ if(!want.has(o)){ o.classList.remove('on'); if(!o.paused) o.pause(); } o.muted=muted||o!==aud; });
+    main.muted=muted||!!aud;
+  }
+  function pick(f,id){ if(choice[f.id]===id) return; choice[f.id]=id; [...th.children].forEach((b,i)=>{const on=f.v[i].id===id; b.classList.toggle('sel',on); b.setAttribute('aria-pressed',on);});
+    path(); const fl=q('.fp-flash'); fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go'); sync(true);
+    if(f.toast) toast(f.toast.replace('%s', f.v.find(v=>v.id===id).label)); }
+  function build(f){ q('.fp-q span').textContent=(f.name||'Flick')+' · tap to swap'; q('.fp-q strong').textContent=f.q||''; q('.fp-q em').textContent=f.hint||''; th.innerHTML='';
+    f.v.forEach(v=>{ const b=document.createElement('button'); b.type='button'; b.className='fp-thumb'+(choice[f.id]===v.id?' sel':''); b.setAttribute('aria-label',v.label); b.setAttribute('aria-pressed',choice[f.id]===v.id); b.innerHTML=`<img src="${esc(v.thumb)}" alt=""><span>${esc(v.label)}</span>`; b.onclick=()=>pick(f,v.id); th.appendChild(b); }); }
+  function startEnding(offset){ if(!EN) return; const k=choice[EN.by]||'A'; Object.entries(ends).forEach(([kk,el])=>{ if(kk!==k){ el.pause(); el.classList.remove('on'); } });
+    const el=ends[k]; curEnd=k; phase='end'; main.pause(); el.muted=muted; el.currentTime=Math.max(0,offset||0); el.classList.add('on'); rail.classList.remove('show'); qq.classList.remove('show'); active=null; sync(true); main.muted=true;
+    el.play().catch(()=>{}); emit(); }
+  function leaveEnding(){ Object.values(ends).forEach(el=>{ el.pause(); el.classList.remove('on'); }); phase='main'; curEnd=null; q('.fp-endcard').hidden=true; }
+  function card(small,h,p,btns,map){ const ec=q('.fp-endcard'); ec.querySelector('small').textContent=small; ec.querySelector('h3').textContent=h; ec.querySelector('p').textContent=p||'';
+    const bb=ec.querySelector('.fp-ec-btns'); bb.innerHTML=''; btns.forEach(([lab,fn,pri])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=lab; if(pri) b.className='pri'; b.onclick=fn; bb.appendChild(b); });
+    ec.querySelector('.fp-ec-map').innerHTML=map||''; ec.hidden=false; emit(); }
+  function showEnd(k){ const e=EN.v[k]; const byF=ALLF.find(f=>f.id===EN.by)||{v:[]};
+    card('Your ending · '+(EN.label||''), e.title, e.summary, [['Try another ending',()=>seek(Math.max(0,FL.find(f=>f.id===EN.by).t0-1.5)),true],['Watch again',()=>seek(0)]],
+      Object.entries(EN.v).map(([kk,v])=>`<span class="${kk===k?'on':''}">${esc((byF.v.find(x=>x.id===kk)||{}).label||kk)} → ${esc(v.title)}</span>`).join('')); }
+  function seek(t){ q('.fp-endcard').hidden=true; if(EN&&t>=BR){ startEnding(t-BR); return; } leaveEnding(); main.currentTime=t; if(started) main.play().catch(()=>{}); }
+  const SUB=cfg.subs||[], ALT=cfg.subsAlt||{}; let subTxt=null;
+  function subs(t){ let txt='';
+    if(hooks.subsOn&&hooks.subsOn()&&phase==='end'&&curEnd&&ALT['END'+curEnd]){
+      const c=ALT['END'+curEnd].find(c=>t>=c[0]&&t<c[1]); txt=c?c[2]:''; }
+    else if(hooks.subsOn&&hooks.subsOn()&&phase==='main'){
+      const RG=FL.map(x=>({id:x.id,t0:x.t0,t1:x.t1,k:x.id})).concat(LK.map(l=>({id:l.flick,t0:l.t0,t1:l.t1,k:'L'+l.flick})));
+      const f=RG.find(x=>t>=x.t0&&t<x.t1&&(choice[x.id]||'A')!=='A'&&ALT[x.k+choice[x.id]]);
+      const list=f?ALT[f.k+choice[f.id]].concat(SUB.filter(c=>c[1]<=f.t0||c[0]>=f.t1)):SUB.filter(c=>!EN||c[0]<BR);
+      const c=list.find(c=>t>=c[0]&&t<c[1]); txt=c?c[2]:''; }
+    if(txt!==subTxt){ subTxt=txt; q('.fp-sub').textContent=txt; } }
+  function tick(){ const t=now(); q('.fp-bar i').style.width=(t/DUR*100)+'%'; hooks.time&&hooks.time(t,DUR); subs(t);
+    if(phase==='main'){
+      if(EN&&main.currentTime>=BR-0.04&&!main.paused){ startEnding(0); }
+      const f=FL.find(x=>main.currentTime>=x.t0-0.04&&main.currentTime<x.t1-0.05)||null;
+      if(f!==active){ active=f; if(f){ build(f); rail.classList.add('show'); qq.classList.add('show'); } else { rail.classList.remove('show'); qq.classList.remove('show'); } sync(true); }
+      else sync(false);
+      if(active) q('.fp-timer i').style.transform=`scaleX(${Math.max(0,1-(main.currentTime-active.t0)/(active.t1-active.t0))})`;
+    }
+    raf=requestAnimationFrame(tick); }
+  raf=requestAnimationFrame(tick);
+  main.addEventListener('ended',()=>{ if(EN&&phase==='main') startEnding(0); else if(!EN&&hooks.epEnd) hooks.epEnd(card); });
+  ['play','pause'].forEach(ev=>{ main.addEventListener(ev,()=>{ emit(); sync(true); }); Object.values(ends).forEach(el=>el.addEventListener(ev,emit)); });
+  main.addEventListener('seeked',()=>sync(true));
+  q('.fp-bar').onclick=e=>{ const r=e.currentTarget.getBoundingClientRect(); seek((e.clientX-r.left)/r.width*DUR); };
+  const api={
+    start(){ q('.fp-start').hidden=true; started=true; main.play().catch(()=>{ muted=true; sync(true); main.play(); emit(); }); },
+    toggle(){ if(!started) return api.start(); const m=media(); if(!q('.fp-endcard').hidden) return seek(0); m.paused?m.play().catch(()=>{}):m.pause(); },
+    isStarted:()=>started, isMuted:()=>muted,
+    mute(v){ muted=v===undefined?!muted:v; Object.values(ends).forEach(el=>el.muted=muted); sync(true); emit(); },
+    seek, restart(){ seek(0); if(!started) api.start(); },
+    destroy(){ cancelAnimationFrame(raf); root.querySelectorAll('video').forEach(v=>{v.pause(); v.removeAttribute('src'); v.load();}); root.innerHTML=''; }
+  };
+  q('.fp-start button').onclick=()=>api.start();
+  path(); emit();
+  return api;
+}
+
+const EPS=[{"main": "media/p_EP1_main.mp4", "poster": "media/poster1.jpg", "duration": 83.9, "startLabel": "Play Episode 1", "flicks": [{"id": "F1", "name": "Flick 1", "short": "Paper", "t0": 47.1, "t1": 57.1, "q": "Velvet ke neeche kya hai?", "hint": "Jo kagaz milega, shak usi par jayega.", "v": [{"id": "A", "label": "Tara ka sketch", "thumb": "media/F1_A.jpg"}, {"id": "B", "label": "Ajay ki photo", "video": "media/p_EP1_F1_B.mp4", "thumb": "media/F1_B.jpg"}, {"id": "C", "label": "Girvi ki parchi", "video": "media/p_EP1_F1_C.mp4", "thumb": "media/F1_C.jpg"}]}, {"id": "F2", "name": "Flick 2", "short": "Accused", "t0": 75.2, "t1": 81.9, "audio": true, "q": "Meera kis par ungli uthaye?", "hint": "Jis par ungli uthegi, wahi Episode 2 kholega.", "v": [{"id": "A", "label": "Tara", "thumb": "media/F2_A.jpg"}, {"id": "B", "label": "Ajay", "video": "media/p_EP1_F2_B.mp4", "thumb": "media/F2_B.jpg"}, {"id": "C", "label": "Dadi", "video": "media/p_EP1_F2_C.mp4", "thumb": "media/F2_C.jpg"}]}], "linked": [{"flick": "F1", "t0": 57.1, "t1": 66.0, "v": {"B": "media/p_EP1_L1_B.mp4", "C": "media/p_EP1_L1_C.mp4"}}], "howto": [["0:47", "Flick 1 · product swap. Pick the paper Meera finds under the velvet. It stays in her hand in Scene 3, and the guilty face cut in at 1:04 follows it."], ["1:15", "Flick 2 · character swap. Pick who Meera accuses. Their confession opens Episode 2."], ["Tap", "a thumbnail on the right and the shot swaps on the same frame, dialogue included."]], "jumps": [["Start", 0], ["Dadi's room", 22.4], ["Flick 1", 45.6], ["Scene 3", 57.1], ["Flick 2", 74.0]], "subs": [[4.04, 7.95, "Meera, ek smile. Aakhri baar single."], [9.34, 13.37, "Kal se Mrs. Saxena!"], [13.44, 18.35, "Pehle Dadi ka Rani Haar. Phir Mrs. Saxena."], [18.5, 22.77, "Meera! Upar aa. Waqt ho gaya."], [25.75, 27.5, "Meri saas ne pehna."], [27.8, 29.2, "Maine pehna."], [29.65, 30.9, "Kal tu pehnegi."], [33.85, 35.85, "Dadi... ye khaali kyun hai?"], [36.6, 46.31, "Kal pheron mein ye haar tere gale mein hona chahiye. Ye barson ki parampara hai. Saari biradari dekhegi."], [60.16, 63.95, "Ye haar ke dibbe mein tha. Kiska hai?"], [66.66, 70.32, "Meera, shaadi se ek raat pehle tamasha mat kar."], [70.36, 72.12, "Pehle baat toh sun—"], [72.36, 75.15, "Nahi. Aaj sab ke saamne baat hogi."], [76.44, 77.91, "Tumne liya na?"], [78.64, 80.52, "Haan. Maine liya."]], "subsAlt": {"F2B": [[75.9, 77.37, "Tumne liya na?"], [78.1, 81.85, "Haan. Maine liya."]], "F2C": [[75.5, 77.76, "Aapne liya, Dadi?"], [77.7, 81.85, "Haan. Maine liya."]]}}, {"main": "media/p_EP2_main.mp4", "poster": "media/poster2.jpg", "duration": 79.5, "startLabel": "Play Episode 2", "flicks": [{"id": "F3", "name": "Flick 3", "short": "Neck piece", "t0": 37.0, "t1": 47.0, "q": "Meera kya pehnegi?", "hint": "Yahi gehna mandap tak jayega.", "v": [{"id": "A", "label": "Tara ki nakal", "thumb": "media/F3_A.jpg"}, {"id": "B", "label": "Dadi ki chain", "video": "media/p_EP2_F3_B.mp4", "thumb": "media/F3_B.jpg"}, {"id": "C", "label": "Phoolon ka haar", "video": "media/p_EP2_F3_C.mp4", "thumb": "media/F3_C.jpg"}]}, {"id": "F4", "name": "Flick 4", "short": "Truth", "t0": 57.0, "t1": 67.0, "audio": true, "q": "Sach kaun bolega?", "hint": "Jo bolega, wahi ending tay karega.", "toast": "Ending: %s bolega", "v": [{"id": "A", "label": "Meera", "thumb": "media/F4_A.jpg"}, {"id": "B", "label": "Dadi", "video": "media/p_EP2_F4_B.mp4", "thumb": "media/F4_B.jpg"}, {"id": "C", "label": "Ajay", "video": "media/p_EP2_F4_C.mp4", "thumb": "media/F4_C.jpg"}]}], "linked": [{"flick": "F2", "t0": 0.0, "t1": 17.0, "audio": true, "v": {"B": "media/p_EP2_L2_B.mp4", "C": "media/p_EP2_L2_C.mp4"}}, {"flick": "F3", "t0": 47.0, "t1": 57.0, "v": {"B": "media/p_EP2_L3_B.mp4", "C": "media/p_EP2_L3_C.mp4"}}], "endings": {"by": "F4", "t0": 67.0, "label": "decided by who tells the truth", "v": {"A": {"video": "media/p_EP2_END_A.mp4", "title": "Meri poti", "summary": "Meera says it herself. The groom takes her hand in front of everyone, and Dadi calls her 'meri poti'."}, "B": {"video": "media/p_EP2_END_B.mp4", "title": "Qarz pyaar se", "summary": "Dadi owns her secret. Meera touches her feet and holds her, and Ajay's photo of that moment becomes the first page of the wedding album."}, "C": {"video": "media/p_EP2_END_C.mp4", "title": "Aakhri kisht", "summary": "Ajay paid the last instalment yesterday. He puts the receipt in Dadi's hand: the haar comes home at nine. Meera can't stop looking at him."}}}, "howto": [["0:00", "The confession follows your Flick 2 pick from Episode 1: Tara, Ajay or Dadi."], ["0:37", "Flick 3 · product swap. Pick what goes around Meera's neck. She wears it at the mandap."], ["0:57", "Flick 4 · character swap. Pick who stands up and tells the truth. That decides the ending at 1:07."]], "jumps": [["Start", 0], ["Dadi's room", 17.0], ["Flick 3", 36.0], ["Mandap", 47.0], ["Flick 4", 56.0], ["Ending", 67.0]], "subs": [[0.42, 8.68, "Haan, maine liya... iska naap. Teen mahine pehle Dadi ne mujhe Delhi mein iski nakal banwane ko kaha tha."], [8.72, 10.75, "Nakal? Kyun?"], [10.92, 15.35, "Kyunki asli haar chhe saal se is ghar mein hai hi nahi."], [17.86, 24.63, "Kal saari biradari poochhegi, Rani Haar kahan hai. Main kya jawaab doongi?"], [25.06, 28.95, "Aapne haar dekar mujhe padhaya. Isse bada gehna kya hoga, Dadi?"], [30.4, 34.35, "Ram Lal nau baje dukaan kholta hai. Phere aath baje hain."], [34.5, 36.95, "Toh Meera kuch aur pehnegi."], [50.62, 52.77, "Ab Dadi ki rasam hai."], [58.56, 63.35, "Asli Rani Haar girvi hai. Aur is ghar ko us par koi sharm nahi."], [72.88, 75.65, "Meri poti."]], "subsAlt": {"LF2B": [[2.6, 11.05, "Haan, maine liya... har mahine Ram Lal ki dukaan ki raseed. Chhe saal se byaaj main bhar raha hoon."], [11.1, 12.71, "Kiska byaaj?"], [12.9, 16.35, "Dadi ne kasam di thi, tujhe kabhi na batane ki."]], "F4B": [[57.66, 66.56, "Asli Rani Haar girvi hai. Aur is ghar ko us par koi sharm nahi."]], "LF2C": [[0.96, 9.98, "Haan, maine liya. Chhe saal pehle. Tere papa ke jaane ke baad... teri college ki fees bharni thi."], [11.06, 14.17, "Aapne haar girvi rakh diya... mere liye?"]], "F4C": [[58.44, 63.33, "Asli Rani Haar girvi hai. Aur is ghar ko us par koi sharm nahi."]], "ENDA": [[72.88, 75.65, "Meri poti."]], "ENDB": [[71.74, 74.69, "Aapka qarz main chukaoongi, Dadi."]], "ENDC": [[68.6, 73.25, "Aakhri kisht kal bhar di thi, Dadi. Nau baje haar ghar aa jayega."]]}}];
+const ALLF=EPS.flatMap(e=>e.flicks);
+const CHOICE={}; ALLF.forEach(f=>CHOICE[f.id]='A');
+const $=id=>document.getElementById(id);
+const fmt=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const lab=(fid)=>{ const f=ALLF.find(x=>x.id===fid); return f.v.find(v=>v.id===CHOICE[fid]).label; };
+function renderPath(){
+  const end=EPS[1].endings; $('path').innerHTML=ALLF.map(f=>`<div class="row"><span>${f.name} · ${f.short}</span><span>${lab(f.id)}</span></div>`).join('')+
+    `<div class="row end"><span>Ending</span><span>${end.v[CHOICE[end.by]].title}</span></div>`;
+}
+let P=null, cur=0, muted=false;
+let SUBS_ON=true; try{ const v=localStorage.getItem('rh_subs'); if(v!==null) SUBS_ON=v==='1'; }catch(e){}
+function setSubs(v){ SUBS_ON=v; try{ localStorage.setItem('rh_subs',v?'1':'0'); }catch(e){} $('cc').setAttribute('aria-pressed',v); $('cc').textContent='Subtitles: '+(v?'On':'Off'); }
+function load(i, autoplay){
+  if(P){ muted=P.isMuted(); P.destroy(); }
+  cur=i; const e=EPS[i];
+  document.querySelectorAll('.ep').forEach(b=>b.setAttribute('aria-pressed', +b.dataset.ep===i));
+  $('howto').innerHTML=e.howto.map(([t,s])=>`<li><b>${t}</b><span>${s}</span></li>`).join('');
+  $('jump').innerHTML=e.jumps.map(([l,t])=>`<button class="chip" data-jump="${t}" type="button">${l}<span class="tc">${fmt(t)}</span></button>`).join('');
+  document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>{ if(!P.isStarted()) P.start(); P.seek(+b.dataset.jump); });
+  P=FlicksPlayer($('stage'), e, CHOICE, {
+    allFlicks:ALLF, muted, subsOn:()=>SUBS_ON,
+    time:(t,d)=>{ $('time').textContent=fmt(t)+' / '+fmt(d); },
+    state:(playing,m)=>{ $('pp').textContent=playing?'Pause':'Play'; $('mute').textContent=m?'Unmute':'Mute'; },
+    path:()=>renderPath(),
+    epEnd:(card)=>card('End of Episode 1', 'Episode 2 · Girvi', 'Your picks carry over: the confession that opens Episode 2 follows the person Meera accused ('+lab('F2')+').', [['Play Episode 2',()=>load(1,true),true],['Watch again',()=>P.seek(0)]])
+  });
+  if(autoplay) P.start();
+}
+document.querySelectorAll('.ep').forEach(b=>b.onclick=()=>load(+b.dataset.ep,false));
+$('cc').onclick=()=>setSubs(!SUBS_ON); setSubs(SUBS_ON);
+$('pp').onclick=()=>P.toggle(); $('mute').onclick=()=>P.mute(); $('restart').onclick=()=>P.restart();
+document.addEventListener('keydown',e=>{ if(e.code==='Space'&&e.target===document.body){e.preventDefault();P.toggle();} if(e.key==='c'&&e.target===document.body) setSubs(!SUBS_ON); });
+load(0,false);
+</script>
