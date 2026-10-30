@@ -146,18 +146,6 @@ ul{margin:0;padding-left:18px;display:grid;gap:6px}
       <div class="path" id="path"></div>
       <p class="m" style="margin:10px 0 0;font-size:13.5px">Tap a thumbnail while a flick is open to switch versions; picture and voice switch together. Each choice carries through the rest of the episode: her outfit stays on, the man you pick is the one who brings the gift and takes her on the date.</p>
     </section>
-    <section>
-      <h3>How this cut was made</h3>
-      <dl class="kv">
-        <dt>Picture</dt><dd>Seedance 2.5 masters for path A, then FLUX.3 Video Edit swaps for the other outfits, men and gifts, so the motion stays identical on every path.</dd>
-        <dt>Checks</dt><dd>Every clip was checked frame by frame for faces, hands, shoes, props and lip movement. Clips that failed were re-generated before they went in.</dd>
-        <dt>Sound</dt><dd>Mixed once per path at the same loudness, so switching never jumps in level.</dd>
-      </dl>
-    </section>
-    <section id="notes">
-      <h3>Known limits</h3>
-      <ul id="lim"></ul>
-    </section>
   </aside>
 </div>
 
@@ -187,8 +175,7 @@ const CH=SEC.filter(s=>s.v).map((s,k,a)=>({s, a:k?a[k-1].t0+a[k-1].len:0, b:s.t0
 CH.forEach(c=>{const d=document.createElement('div'); d.className='fp-seg'; const w=c.b-c.a;
   d.innerHTML=`<em style="left:${(c.s.t0+c.s.w0-c.a)/w*100}%;width:${(c.s.w1-c.s.w0)/w*100}%"></em><i></i>`; c.el=d; $('bar').appendChild(d);});
 function paintBar(t){ CH.forEach(c=>{ const f=Math.max(0,Math.min(1,(t-c.a)/(c.b-c.a))); c.el.querySelector('i').style.width=(f*100)+'%'; }); }
-LIMITS.forEach(t=>{const li=document.createElement('li'); li.textContent=t; $('lim').appendChild(li);});
-if(!LIMITS.length) $('notes').hidden=true;
+
 
 function fileFor(s,c=choice){
   switch(s.id){ case 'INTRO': return 'INTRO'; case 'FD': return 'FD_'+c.FD; case 'F1': return 'F1_'+c.FD+c.F1;
