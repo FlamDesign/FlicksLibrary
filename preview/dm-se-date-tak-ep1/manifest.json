@@ -1,0 +1,80 @@
+{
+ "duration": 111.0,
+ "fps": 24,
+ "web_resolution": "540x960",
+ "sections": [
+  {
+   "id": "INTRO",
+   "start": 0,
+   "length": 31.5,
+   "flick_window": null
+  },
+  {
+   "id": "FD",
+   "start": 31.5,
+   "length": 14,
+   "flick_window": [
+    0,
+    10
+   ]
+  },
+  {
+   "id": "F1",
+   "start": 45.5,
+   "length": 22,
+   "flick_window": [
+    0,
+    10
+   ]
+  },
+  {
+   "id": "F2",
+   "start": 67.5,
+   "length": 22,
+   "flick_window": [
+    0,
+    10
+   ]
+  },
+  {
+   "id": "F3",
+   "start": 89.5,
+   "length": 21.5,
+   "flick_window": [
+    0,
+    10
+   ]
+  }
+ ],
+ "choices": {
+  "FD (outfit)": {
+   "A": "Peeli kurti",
+   "B": "Black dress",
+   "C": "White shirt & jeans"
+  },
+  "F1 (man)": {
+   "K": "Kabir",
+   "N": "Neel",
+   "R": "Rehan"
+  },
+  "F2 (gift)": {
+   "S": "Sunflowers",
+   "R": "Red roses",
+   "T": "Pink tulips"
+  },
+  "F3 (date)": {
+   "A": "Marine Drive",
+   "B": "Juhu fair",
+   "C": "Chai in the rain"
+  }
+ },
+ "file_pattern": {
+  "INTRO": "v/INTRO.mp4",
+  "FD": "v/FD_{outfit}.mp4",
+  "F1": "v/F1_{outfit}{man}.mp4",
+  "F2": "v/F2_{outfit}{man}{gift}.mp4",
+  "F3": "v/F3_{outfit}{man}{date}.mp4"
+ },
+ "music": "music.mp3 (one continuous 111 s track, identical on every path; section files carry dialogue/SFX/ambience only)",
+ "subtitles": "subtitles.json (a/b = seconds on the episode clock; optional c = required choices)"
+}
