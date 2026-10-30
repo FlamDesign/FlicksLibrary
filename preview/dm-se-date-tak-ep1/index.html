@@ -1,0 +1,312 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DM Se Date Tak · Episode 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* One stitched episode in the studio's Flicks player look: thumbnails rise over the picture during each flick window. Dark-only by choice (night drama, matches the studio player). */
+:root{
+  --bg:#0b0a0d; --panel:#16141a; --line:#2a2730; --fg:#f1edf3; --muted:#a49dac;
+  --red:#e2283c; --gold:#ffd166;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{background:var(--bg);color:var(--fg);margin:0}
+body{font:15px/1.5 var(--ui);padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));padding-block:12px 32px;-webkit-text-size-adjust:100%}
+header.top{max-width:1040px;margin:0 auto 12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+h1{font:800 clamp(24px,6vw,38px)/1.05 var(--ui);letter-spacing:-.02em;margin:0}
+.ep{font:700 12px var(--mono);letter-spacing:.14em;color:var(--gold);text-transform:uppercase}
+.sub{color:var(--muted);font-size:13.5px;flex-basis:100%}
+.wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
+.stage{width:min(100%,calc((100dvh - 150px) * 9 / 16),460px);min-width:min(100%,280px);margin:0 auto}
+@media (min-width:820px){.wrap{grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:36px}.stage{width:100%;margin:0}.sub{flex-basis:auto}}
+
+/* ---- player (mirrors the studio Flicks player) ---- */
+.fp{position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;background:#000;container-type:inline-size;border-radius:26px;box-shadow:0 0 0 1px var(--line),0 30px 80px -30px #000;user-select:none;-webkit-user-select:none}
+.fp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.fp .fp-v{transition:opacity .06s linear}
+.fp-tap{position:absolute;inset:0;z-index:4}
+.fp-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:5}.fp-flash.go{animation:fpflash .32s ease-out}
+@keyframes fpflash{0%{opacity:.55}100%{opacity:0}}
+/* progress: one segment per flick chapter; red marks show where each flick is open */
+.fp-bars{position:absolute;left:3.6cqw;right:3.6cqw;bottom:2.6cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:1.6cqw;z-index:9;cursor:pointer}
+.fp-bars::before{content:"";position:absolute;inset:-3cqw 0 -2cqw}
+.fp-seg{position:relative;height:.9cqw;border-radius:1cqw;background:rgba(255,255,255,.28)}
+.fp-seg>i{position:absolute;inset:0 auto 0 0;width:0;background:#fff;border-radius:1cqw}
+.fp-seg>em{position:absolute;top:0;bottom:0;background:var(--red);border-radius:1cqw;pointer-events:none;opacity:.95}
+.fp-seg>em.past{opacity:.55}
+/* flick label, top-left */
+.fp-tag{position:absolute;top:4.2cqw;left:4.2cqw;z-index:8;display:inline-flex;align-items:center;gap:1.4cqw;background:var(--red);color:#fff;font:800 3cqw/1 var(--ui);letter-spacing:.16em;text-transform:uppercase;padding:1.8cqw 2.6cqw;border-radius:1.8cqw;box-shadow:0 1cqw 3cqw -1cqw rgba(0,0,0,.6);opacity:0;transform:translateY(-2cqw);transition:opacity .25s,transform .3s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.fp-tag::before{content:"";width:1.3cqw;height:1.3cqw;border-radius:50%;background:#fff;animation:fpdot 1.2s ease-in-out infinite}
+.fp-tag.show{opacity:1;transform:none}
+@keyframes fpdot{50%{opacity:.3}}
+/* question + choice cards, bottom */
+.fp-switch{position:absolute;left:0;right:0;bottom:0;z-index:8;padding:22cqw 3.6cqw 7cqw;display:grid;gap:3.2cqw;background:linear-gradient(180deg,transparent,rgba(8,8,12,.62) 32%,rgba(8,8,12,.9) 70%);transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.fp-switch.show{transform:none}
+.fp-switch>*{pointer-events:auto}
+.fp-q{display:grid;gap:1.2cqw;color:#fff}
+.fp-q strong{font:800 5.4cqw/1.12 var(--ui);letter-spacing:-.01em;text-shadow:0 .3cqw 1.6cqw rgba(0,0,0,.6)}
+.fp-q em{font:500 3.4cqw/1.3 var(--ui);font-style:normal;color:rgba(255,255,255,.82)}
+.fp-switch.show .fp-q{animation:fpq .5s cubic-bezier(.2,.8,.2,1) both .1s}
+@keyframes fpq{from{opacity:0;transform:translateY(2cqw)}}
+.fp-thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.4cqw}
+.fp-thumb{position:relative;appearance:none;margin:0;cursor:pointer;background:rgba(38,38,46,.88);border:.35cqw solid rgba(255,255,255,.14);border-radius:3.2cqw;padding:2.6cqw 1.6cqw 2.8cqw;display:grid;justify-items:center;align-content:start;gap:1.6cqw;color:#fff;text-align:center;transition:background .15s,border-color .15s,transform .15s}
+.fp-thumb i{display:block;width:13.5cqw;aspect-ratio:1;border-radius:2.2cqw;overflow:hidden;background:#222}
+.fp-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.fp-thumb b{font:600 3.5cqw/1.2 var(--ui)}
+.fp-thumb small{font:500 2.8cqw/1.2 var(--ui);color:rgba(255,255,255,.62);margin-top:-.8cqw}
+.fp-thumb.sel{background:rgba(120,28,48,.62);border-color:#f0506e}
+.fp-thumb.sel::after{content:"";position:absolute;top:1.6cqw;right:1.6cqw;width:4.2cqw;height:4.2cqw;border-radius:50%;background:#f0506e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/70% no-repeat}
+.fp-thumb:active{transform:scale(.97)}
+.fp-thumb:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.fp-sub{position:absolute;left:5cqw;right:5cqw;bottom:9cqw;z-index:7;display:flex;justify-content:center;pointer-events:none;transition:bottom .3s cubic-bezier(.2,.8,.2,1)}
+.fp-sub span{max-width:100%;background:rgba(0,0,0,.62);color:#fff;font:600 4.3cqw/1.35 var(--ui);text-align:center;padding:1.2cqw 2.6cqw;border-radius:1.6cqw;-webkit-box-decoration-break:clone;box-decoration-break:clone;text-wrap:balance}
+.fp-sub[hidden]{display:none}
+.fp-toast{position:absolute;z-index:30;left:50%;top:40%;transform:translate(-50%,-50%);background:rgba(20,18,24,.92);color:#fff;font:600 3.6cqw/1.4 var(--ui);padding:3cqw 4cqw;border-radius:3cqw;width:max-content;max-width:80%;text-align:center;opacity:0;transition:opacity .2s;pointer-events:none}.fp-toast.show{opacity:1}
+.fp-wait{position:absolute;left:50%;top:50%;width:9cqw;height:9cqw;margin:-4.5cqw;border-radius:50%;border:.9cqw solid rgba(255,255,255,.25);border-top-color:#fff;z-index:6;opacity:0;pointer-events:none;animation:spin .8s linear infinite;transition:opacity .2s}.fp-wait.on{opacity:1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fp-start{position:absolute;inset:0;z-index:20;display:grid;place-items:end center;padding-bottom:16%;background:center/cover no-repeat #000}
+.fp-start::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.6))}
+.fp-start button,.fp-ec-btns button{position:relative;z-index:1;border:0;cursor:pointer;background:var(--red);color:#fff;font:700 15px/1 var(--ui);padding:14px 22px;border-radius:99px;box-shadow:0 10px 30px -8px rgba(226,40,60,.7)}
+.fp-endcard{position:absolute;inset:0;z-index:15;display:grid;place-items:center;background:rgba(6,5,8,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:8cqw;color:#fff;text-align:center}
+.fp-endcard[hidden]{display:none}
+.fp-ec-in{display:grid;gap:3cqw;justify-items:center}
+.fp-endcard small{font:600 2.8cqw/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.fp-endcard h3{margin:0;font:800 8cqw/1.05 var(--ui);letter-spacing:-.01em}
+.fp-endcard p{margin:0;font:400 3.6cqw/1.45 var(--ui);color:#d8d2de}
+.fp-ec-btns{display:flex;gap:2.4cqw;flex-wrap:wrap;justify-content:center;margin-top:2cqw}
+.fp-ec-btns button{font-size:3.6cqw;padding:3cqw 4.4cqw;box-shadow:none}
+.fp-ec-btns button.alt{background:#fff;color:#111}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* controls + side panel */
+.ctrl{display:flex;gap:8px;align-items:center;margin:10px 0 0;flex-wrap:wrap}
+.ctrl button,.ctrl a{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--fg);font:600 14px/1 var(--ui);min-height:44px;padding:0 16px;border-radius:99px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;touch-action:manipulation}
+.ctrl button[aria-pressed="true"]{border-color:var(--fg)}
+.ctrl .cc{font:800 11px/1 var(--ui);letter-spacing:.04em;border:1.5px solid currentColor;border-radius:4px;padding:2px 3px}
+.ctrl button:hover,.ctrl a:hover{border-color:#4a4552}
+.ctrl .time{margin-left:auto;font:500 12px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.side{min-width:0;display:grid;gap:0}
+.side section{border-top:1px solid var(--line);padding-block:16px}
+.side section:first-child{border-top:0;padding-top:0}
+.side h3{font:700 17px/1.3 var(--ui);margin:0 0 10px}
+.path{display:grid;gap:6px}
+.path div{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:14px}
+.path div.now{border-color:var(--red)}
+.path span:first-child{color:var(--muted)} .path span:last-child{font-weight:700}
+.m{color:var(--muted)}
+ul{margin:0;padding-left:18px;display:grid;gap:6px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-variant-numeric:tabular-nums}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+@media (prefers-reduced-motion:reduce){.fp-switch,.fp-thumb,.fp-tag{transition:none}.fp-flash.go,.fp-switch.show .fp-q,.fp-tag::before{animation:none}}
+</style>
+
+
+<header class="top">
+  <h1>DM Se Date Tak</h1>
+  <span class="ep">Episode 1 · 81 paths</span>
+  <span class="sub">Pick her outfit, who HappyLucky12 is, the gift and the first date. 1:51 on every path.</span>
+</header>
+
+<div class="wrap">
+  <div class="stage">
+    <div class="fp" id="fp">
+      <video class="fp-v" id="v0" playsinline preload="auto"></video>
+      <video class="fp-v" id="v1" playsinline preload="auto"></video>
+      <audio id="mus" src="music.mp3" preload="auto"></audio>
+      <div class="fp-tap" id="tap"></div>
+      <div class="fp-flash" id="flash"></div>
+      <div class="fp-wait" id="wait"></div>
+      <div class="fp-switch" id="sw" role="group" aria-label="Choose a version">
+        <div class="fp-q"><strong id="q"></strong><em id="hint"></em></div>
+        <div class="fp-thumbs" id="thumbs"></div>
+      </div>
+      <div class="fp-tag" id="tag">Flick 1</div>
+      <div class="fp-bars" id="bar"></div>
+      <div class="fp-sub" id="sub" aria-live="off" hidden><span id="subt"></span></div>
+      <div class="fp-toast" id="toast"></div>
+      <div class="fp-endcard" id="end" hidden><div class="fp-ec-in">
+        <small>Your path</small><h3 id="endTitle"></h3><p id="endPath"></p>
+        <div class="fp-ec-btns"><button type="button" id="other">Try another date</button><button type="button" class="alt" id="again">Watch again</button></div>
+      </div></div>
+      <div class="fp-start" id="start" style="background-image:url('s/poster.jpg')"><button type="button" id="play">Play episode</button></div>
+    </div>
+    <div class="ctrl">
+      <button type="button" id="pp">Play</button>
+      <button type="button" id="mute">Mute</button>
+      <button type="button" id="cc" aria-pressed="true"><span class="cc">CC</span><span id="ccl">Subtitles on</span></button>
+      <span class="time" id="time">0:00 / 1:51</span>
+    </div>
+  </div>
+
+  <aside class="side">
+    <section>
+      <h3>Your path</h3>
+      <div class="path" id="path"></div>
+      <p class="m" style="margin:10px 0 0;font-size:13.5px">Tap a thumbnail while a flick is open to switch versions; picture and voice switch together. Each choice carries through the rest of the episode: her outfit stays on, the man you pick is the one who brings the gift and takes her on the date.</p>
+    </section>
+    <section>
+      <h3>How this cut was made</h3>
+      <dl class="kv">
+        <dt>Picture</dt><dd>Seedance 2.5 masters for path A, then FLUX.3 Video Edit swaps for the other outfits, men and gifts, so the motion stays identical on every path.</dd>
+        <dt>Checks</dt><dd>Every clip was checked frame by frame for faces, hands, shoes, props and lip movement. Clips that failed were re-generated before they went in.</dd>
+        <dt>Sound</dt><dd>Mixed once per path at the same loudness, so switching never jumps in level.</dd>
+      </dl>
+    </section>
+    <section id="notes">
+      <h3>Known limits</h3>
+      <ul id="lim"></ul>
+    </section>
+  </aside>
+</div>
+
+<script>
+const DUR=111.0;
+const SEC=[
+ {id:'INTRO',t0:0,len:31.5},
+ {id:'FD',n:1,t0:31.5,len:14,w0:0,w1:10,q:'Ira kya pehnegi?',hint:'What does she wear to meet him?',name:'Her outfit',
+  v:[{id:'A',label:'Peeli kurti'},{id:'B',label:'Black dress'},{id:'C',label:'White shirt & jeans'}]},
+ {id:'F1',n:2,t0:45.5,len:22,w0:0,w1:10,q:'HappyLucky12 kaun hai?',hint:'Who has she been talking to?',name:'HappyLucky12 is',
+  v:[{id:'K',label:'Kabir',sub:'Musician'},{id:'N',label:'Neel',sub:'4B'},{id:'R',label:'Rehan',sub:'Doctor'}]},
+ {id:'F2',n:3,t0:67.5,len:22,w0:0,w1:10,q:'Kya laaya hai?',hint:'What did he bring her?',name:'The gift',
+  v:[{id:'S',label:'Sunflowers'},{id:'R',label:'Red roses'},{id:'T',label:'Pink tulips'}]},
+ {id:'F3',n:4,t0:89.5,len:21.5,w0:0,w1:10,q:'Pehli date kahan?',hint:'Where do they go on the first date?',name:'First date',
+  v:[{id:'A',label:'Marine Drive'},{id:'B',label:'Juhu fair'},{id:'C',label:'Chai in the rain'}]},
+];
+const ENDS={A:'Marine Drive',B:'The Juhu fair',C:'Chai in the rain'};
+const choice={FD:'A',F1:'K',F2:'S',F3:'A'};
+const LIMITS=[];
+const SUBS=[{"a": 14.46, "b": 18.74, "t": "Insta pe mile the hum, aur pata chala ek hi society mein rehte hain."}, {"a": 18.78, "b": 22.66, "t": "Teen mahine, roz chats, raat bhar calls."}, {"a": 22.72, "b": 25.52, "t": "Itna close kabhi kisi se feel nahi kiya."}, {"a": 25.56, "b": 28.38, "t": "Par humne jaanboojhkar apni pehchaan chhupaye rakhi."}, {"a": 28.42, "b": 30.6, "t": "Pehle baaton se ek doosre ko jaanna tha."}, {"a": 30.64, "b": 32.82, "t": "Jaise purani filmon mein hota tha."}, {"a": 32.88, "b": 35.2, "t": "Aur ab main ready hoon."}, {"a": 57.68, "b": 58.6, "t": "Tum?"}, {"a": 60.5, "b": 66.05, "t": "Hi. Main hi hoon... HappyLucky12.", "c": {"F1": "K"}}, {"a": 60.5, "b": 65.71, "t": "Hi. Main hi hoon... HappyLucky12.", "c": {"F1": "N"}}, {"a": 60.5, "b": 65.56, "t": "Hi. Main hi hoon... HappyLucky12.", "c": {"F1": "R"}}, {"a": 72.0, "b": 74.99, "t": "Sunflowers... tumhare favourite.", "c": {"F1": "K", "F2": "S"}}, {"a": 72.0, "b": 74.57, "t": "Roses... tumhare favourite.", "c": {"F1": "K", "F2": "R"}}, {"a": 72.0, "b": 74.53, "t": "Tulips... tumhare favourite.", "c": {"F1": "K", "F2": "T"}}, {"a": 72.0, "b": 75.33, "t": "Sunflowers... tumhare favourite.", "c": {"F1": "N", "F2": "S"}}, {"a": 72.0, "b": 74.78, "t": "Roses... tumhare favourite.", "c": {"F1": "N", "F2": "R"}}, {"a": 72.0, "b": 74.71, "t": "Tulips... tumhare favourite.", "c": {"F1": "N", "F2": "T"}}, {"a": 72.0, "b": 75.33, "t": "Sunflowers... tumhare favourite.", "c": {"F1": "R", "F2": "S"}}, {"a": 72.0, "b": 75.08, "t": "Roses... tumhare favourite.", "c": {"F1": "R", "F2": "R"}}, {"a": 72.0, "b": 74.84, "t": "Tulips... tumhare favourite.", "c": {"F1": "R", "F2": "T"}}, {"a": 78.64, "b": 80.11, "t": "Tumhe yaad tha?"}, {"a": 81.5, "b": 85.07, "t": "Of course... tumhari har baat yaad hai.", "c": {"F1": "K"}}, {"a": 85.51, "b": 88.33, "t": "Ab batao... pehli date par kahan chalein?", "c": {"F1": "K"}}, {"a": 81.5, "b": 84.65, "t": "Of course... tumhari har baat yaad hai.", "c": {"F1": "N"}}, {"a": 85.29, "b": 88.25, "t": "Ab batao... pehli date par kahan chalein?", "c": {"F1": "N"}}, {"a": 81.5, "b": 84.81, "t": "Of course... tumhari har baat yaad hai.", "c": {"F1": "R"}}, {"a": 85.29, "b": 89.21, "t": "Ab batao... pehli date par kahan chalein?", "c": {"F1": "R"}}, {"a": 107.8, "b": 109.81, "t": "Agli date bhi yahin."}];
+const $=id=>document.getElementById(id);
+const fp=$('fp'), th=$('thumbs'), sw=$('sw');
+const V=[$('v0'),$('v1')]; const MUS=$('mus');
+let act=0, si=0, started=false, ended=false, muted=false, active=null, tt=0, swapping=false;
+const prep={el:null,file:null,i:-1};   // what the idle element holds
+const CH=SEC.filter(s=>s.v).map((s,k,a)=>({s, a:k?a[k-1].t0+a[k-1].len:0, b:s.t0+s.len}));
+CH.forEach(c=>{const d=document.createElement('div'); d.className='fp-seg'; const w=c.b-c.a;
+  d.innerHTML=`<em style="left:${(c.s.t0+c.s.w0-c.a)/w*100}%;width:${(c.s.w1-c.s.w0)/w*100}%"></em><i></i>`; c.el=d; $('bar').appendChild(d);});
+function paintBar(t){ CH.forEach(c=>{ const f=Math.max(0,Math.min(1,(t-c.a)/(c.b-c.a))); c.el.querySelector('i').style.width=(f*100)+'%'; }); }
+LIMITS.forEach(t=>{const li=document.createElement('li'); li.textContent=t; $('lim').appendChild(li);});
+if(!LIMITS.length) $('notes').hidden=true;
+
+function fileFor(s,c=choice){
+  switch(s.id){ case 'INTRO': return 'INTRO'; case 'FD': return 'FD_'+c.FD; case 'F1': return 'F1_'+c.FD+c.F1;
+    case 'F2': return 'F2_'+c.FD+c.F1+c.F2; case 'F3': return 'F3_'+c.FD+c.F1+c.F3; }
+}
+const src=f=>'v/'+f+'.mp4';
+const cur=()=>V[act], idle=()=>V[1-act];
+const gtime=()=>SEC[si].t0+(cur().currentTime||0);
+const secAt=t=>SEC.reduce((a,s,i)=>t>=s.t0-0.001?i:a,0);
+const fmt=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2000);}
+function flash(){const f=$('flash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');}
+function label(id){const s=SEC.find(x=>x.id===id);return s.v.find(v=>v.id===choice[id]).label;}
+function renderPath(){
+  const c=SEC[si].id;
+  $('path').innerHTML=SEC.filter(s=>s.v).map(s=>`<div class="${s.id===c?'now':''}"><span>${s.name}</span><span>${label(s.id)}</span></div>`).join('')+`<div><span>Ending</span><span>${ENDS[choice.F3]}</span></div>`;
+}
+function show(){ V.forEach((el,k)=>el.style.opacity=k===act?1:0); V.forEach(el=>el.muted=muted); }
+// load a file into the idle element at offset; resolves when it can play
+function load(file,off){
+  const el=idle();
+  return new Promise(res=>{
+    const go=()=>{ el.currentTime=Math.max(0,off); const ok=()=>{el.removeEventListener('seeked',ok);res(el);}; if(Math.abs(el.currentTime-off)<0.05&&el.readyState>=3) res(el); else el.addEventListener('seeked',ok); };
+    if(prep.file===file && el.readyState>=1){ go(); return; }
+    prep.file=file; el.src=src(file); el.load(); el.addEventListener('loadedmetadata',go,{once:true});
+  });
+}
+async function switchTo(i,off,play=true){
+  swapping=true; $('wait').classList.add('on');
+  const file=fileFor(SEC[i]); const el=await load(file,off);
+  const old=cur(); old.pause();
+  act=1-act; si=i; prep.file=null; show();
+  if(play && started && !ended) await el.play().catch(()=>{});
+  swapping=false; $('wait').classList.remove('on'); renderPath(); syncTray(true);
+}
+function syncTray(force){
+  const t=gtime(), s=SEC[si];
+  const inWin=s.v && t>=s.t0+s.w0-0.04 && t<s.t0+s.w1-0.05;
+  const now=inWin?s:null;
+  if(now!==active||force){ if(active&&!now&&!force) toast(active.name+': '+label(active.id)); active=now; if(now){build(now);sw.classList.add('show');$('tag').classList.add('show');} else {sw.classList.remove('show');$('tag').classList.remove('show');} }
+}
+function build(s){
+  $('tag').textContent='Flick '+s.n; $('q').textContent=s.q; $('hint').textContent=s.hint; th.innerHTML='';
+  s.v.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='fp-thumb'+(choice[s.id]===v.id?' sel':'');
+    b.setAttribute('aria-pressed',choice[s.id]===v.id);b.setAttribute('aria-label',v.label+(v.sub?', '+v.sub:''));
+    b.innerHTML=`<i><img src="s/${s.id}_${v.id}.jpg" alt=""></i><b>${v.label}</b>`+(v.sub?`<small>${v.sub}</small>`:'');
+    b.onclick=e=>{e.stopPropagation();pick(s,v.id);};th.appendChild(b);});
+}
+async function pick(s,id){
+  if(choice[s.id]===id||swapping) return; choice[s.id]=id;
+  [...th.children].forEach((b,k)=>{const on=s.v[k].id===id;b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on);});
+  flash(); renderPath(); prep.file=null;
+  const off=cur().currentTime+0.15; await switchTo(si,off);
+}
+function tick(){
+  if(started && !swapping){
+    const el=cur(), s=SEC[si], t=gtime();
+    paintBar(t); $('time').textContent=fmt(t)+' / '+fmt(DUR);
+    // preload next section near the end of this one
+    if(si<SEC.length-1 && el.currentTime>s.len-3 && prep.file!==fileFor(SEC[si+1])) load(fileFor(SEC[si+1]),0);
+    if(!el.paused && el.currentTime>=s.len-0.045){
+      if(si<SEC.length-1){ const nxt=si+1; swapping=true; const nel=idle();
+        if(prep.file===fileFor(SEC[nxt]) && nel.readyState>=3){ nel.currentTime=0; el.pause(); act=1-act; si=nxt; prep.file=null; show(); nel.play().catch(()=>{}); swapping=false; renderPath(); }
+        else { swapping=false; switchTo(nxt,0); }
+      } else finish();
+    }
+    syncTray(false);
+    syncMusic();
+    syncSub();
+  }
+  requestAnimationFrame(tick);
+}
+function syncMusic(){
+  const el=cur(); const run=started && !ended && !swapping && !el.paused && el.readyState>=3;
+  if(!run){ if(!MUS.paused) MUS.pause(); return; }
+  const t=gtime(), d=MUS.currentTime-t;
+  if(MUS.paused){ MUS.currentTime=t; MUS.playbackRate=1; MUS.play().catch(()=>{}); return; }
+  if(Math.abs(d)>0.5){ MUS.currentTime=t; MUS.playbackRate=1; }
+  else if(Math.abs(d)>0.04){ MUS.playbackRate=d>0?0.97:1.03; }
+  else MUS.playbackRate=1;
+}
+function finish(){ ended=true; MUS.pause(); V.forEach(e=>e.pause()); $('endTitle').textContent=ENDS[choice.F3]; $('endPath').textContent=['FD','F1','F2','F3'].map(label).join(' · '); $('end').hidden=false; sw.classList.remove('show'); }
+V.forEach(el=>el.addEventListener('ended',()=>{ if(el===cur() && si===SEC.length-1) finish(); }));
+async function start(){
+  $('start').hidden=true; started=true; ended=false;
+  // unlock both elements inside the tap so later swaps can play with sound
+  act=0; si=0; V[0].src=src('INTRO'); V[1].src=src('INTRO'); prep.file='INTRO';
+  { MUS.muted=muted; const p0=MUS.play(); if(p0) p0.then(()=>{MUS.pause();}).catch(()=>{}); }
+  { const el=V[1]; el.muted=true; const p=el.play(); if(p) p.then(()=>{el.pause();el.muted=muted;}).catch(()=>{}); }
+  show(); cur().currentTime=0; cur().muted=muted;
+  cur().play().catch(()=>{ muted=true; setMute(); cur().play(); });
+  renderPath();
+}
+function seek(t){ $('end').hidden=true; ended=false; t=Math.max(0,Math.min(DUR-0.2,t)); const i=secAt(t); switchTo(i,t-SEC[i].t0); }
+function togglePlay(){ if(!started) return start(); if(!$('end').hidden) return seek(0); const el=cur(); el.paused?el.play().catch(()=>{}):el.pause(); }
+function setMute(){ $('mute').textContent=muted?'Unmute':'Mute'; V.forEach(el=>el.muted=muted); MUS.muted=muted; }
+$('play').onclick=start; $('tap').onclick=togglePlay; $('pp').onclick=togglePlay;
+$('mute').onclick=()=>{muted=!muted;setMute();};
+$('bar').onclick=e=>{e.stopPropagation();if(!started)return; let best=CH[0],bd=1e9; CH.forEach(c=>{const r=c.el.getBoundingClientRect(); const d=e.clientX<r.left?r.left-e.clientX:e.clientX>r.right?e.clientX-r.right:0; if(d<bd){bd=d;best=c;}}); const r=best.el.getBoundingClientRect(); const f=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)); seek(best.a+f*(best.b-best.a));};
+V.forEach(el=>['play','pause'].forEach(ev=>el.addEventListener(ev,()=>{ if(el===cur()) $('pp').textContent=el.paused?'Play':'Pause'; })));
+$('again').onclick=e=>{e.stopPropagation();seek(0);};
+$('other').onclick=e=>{e.stopPropagation();const nx={A:'B',B:'C',C:'A'};choice.F3=nx[choice.F3];renderPath();seek(SEC[4].t0);};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePlay();}});
+// Hinglish subtitles: cues follow the episode clock and the chosen man/gift
+let subsOn=true; try{ subsOn=localStorage.getItem('dsdt_subs')!=='off'; }catch(e){}
+function setCC(){ $('cc').setAttribute('aria-pressed',subsOn); $('ccl').textContent=subsOn?'Subtitles on':'Subtitles off'; if(!subsOn) $('sub').hidden=true; }
+$('cc').onclick=()=>{ subsOn=!subsOn; try{localStorage.setItem('dsdt_subs',subsOn?'on':'off');}catch(e){} setCC(); };
+let lastSub='';
+function syncSub(){
+  const el=$('sub');
+  if(!subsOn || !started || ended){ el.hidden=true; return; }
+  const t=gtime();
+  const c=SUBS.find(c=>t>=c.a && t<c.b && (!c.c || Object.keys(c.c).every(k=>choice[k]===c.c[k])));
+  const txt=c?c.t:'';
+  if(txt!==lastSub){ $('subt').textContent=txt; lastSub=txt; }
+  el.hidden=!txt;
+  el.style.bottom = active ? (sw.offsetHeight+8)+'px' : '';
+}
+setCC();
+show(); renderPath(); requestAnimationFrame(tick);
+</script>
